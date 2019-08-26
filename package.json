@@ -18,7 +18,9 @@
     },
     "homepage": "https://github.com/TooNote/WebClient#readme",
     "devDependencies": {
+        "@toonote/md-editor": "^1.0.0-alpha.1",
         "@vue/composition-api": "^0.2.0",
+        "css-loader": "^3.2.0",
         "eslint": "^6.2.2",
         "ts-loader": "^6.0.4",
         "typescript": "^3.5.3",

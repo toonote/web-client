@@ -10,8 +10,15 @@
     <div id="container"></div>
     <script src="../../dist/view.js"></script>
     <script>
-        const app = window.WebClientView.default;
-        app.$mount('#container');
+        const webClientView = window.WebClientView.default;
+        window.testUser = {
+            userName: 'hello'
+        };
+        webClientView.setData('userInfo', window.testUser);
+        webClientView.setData('editor', {
+            content: 'test'
+        });
+        webClientView.app.$mount('#container');
     </script>
 </body>
 </html>
