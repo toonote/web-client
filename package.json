@@ -1,0 +1,31 @@
+{
+    "name": "@toonote/web-client",
+    "version": "1.0.0-alpha.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build:dev": "webpack"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/TooNote/WebClient.git"
+    },
+    "author": "TooBug <i@toobug.net>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/TooNote/WebClient/issues"
+    },
+    "homepage": "https://github.com/TooNote/WebClient#readme",
+    "devDependencies": {
+        "@vue/composition-api": "^0.2.0",
+        "eslint": "^6.2.2",
+        "ts-loader": "^6.0.4",
+        "typescript": "^3.5.3",
+        "vue": "^2.6.10",
+        "vue-loader": "^15.7.1",
+        "vue-template-compiler": "^2.6.10",
+        "webpack": "^4.39.2",
+        "webpack-cli": "^3.3.7"
+    }
+}
