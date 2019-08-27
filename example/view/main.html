@@ -11,12 +11,33 @@
     <script src="../../dist/view.js"></script>
     <script>
         const webClientView = window.WebClientView.default;
-        window.testUser = {
-            userName: 'hello'
+        const userInfo = {
+            name: 'TooBug',
+            avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
+            labels: ['SVIP']
         };
-        webClientView.setData('userInfo', window.testUser);
+        webClientView.setData('userInfo', userInfo);
         webClientView.setData('editor', {
             content: 'test'
+        });
+        webClientView.setData('notebook', {
+            title: '测试笔试本',
+            categories: {
+                '测试分类1': [{
+                    id: '1',
+                    title: '笔记1'
+                }, {
+                    id: '2',
+                    title: '笔记2'
+                }],
+                '测试分类2': [{
+                    id: '3',
+                    title: '笔记3'
+                }, {
+                    id: '4',
+                    title: '笔记4'
+                }],
+            }
         });
         webClientView.app.$mount('#container');
     </script>

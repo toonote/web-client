@@ -1,0 +1,123 @@
+.markdown{
+	font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+	line-height: 28px;
+	font-size: 14px;
+	color:#4D4D4C;
+	letter-spacing: 1px;
+	padding:0 20px;
+}
+/*标题*/
+.markdown h1,.markdown h2,.markdown h3,
+.markdown h4,.markdown h5,.markdown h6{
+	margin:16px 0;
+	color:#718C00;
+	font-weight: normal;
+}
+/*表格*/
+.markdown table{
+	margin-bottom: 28px;
+	margin-left:auto;
+	margin-right:auto;
+	/*width:80%;*/
+	width:100%;
+	border:1px solid #E0E0E0;
+	border-collapse: collapse;
+}
+.markdown table th,
+.markdown table td{
+	padding: 3px;
+	border:1px solid #E0E0E0;
+}
+.markdown table th{
+	background:#F0F0F0;
+}
+
+/*段落*/
+.markdown p{
+	margin-bottom: 28px;
+	/*text-indent: 34px;*/
+}
+
+/*列表*/
+.markdown ul,.markdown ol{
+	margin-bottom: 28px;
+	/*padding-left:34px;*/
+	/*list-style-position: inside;*/
+	margin-left: 2em;
+	list-style-position: outside;
+}
+.markdown li > p{
+	text-indent: 0;
+	margin-bottom: 0;
+}
+.markdown ul ul,
+.markdown ul ol,
+.markdown ol ol,
+.markdown ol ul{
+	padding-left: 34px;
+	margin-bottom: 0;
+}
+/*todo*/
+.markdown li.todo{
+	list-style: none;
+	margin-left: -1.4em;
+}
+.markdown li.todo.done{
+	color:#aaa;
+}
+.markdown li.todo.done > p::first-letter{
+	color:green;
+}
+.markdown li.todo.doing > p::first-letter{
+	/*color:#aaa;*/
+}
+/*.markdown li.todo.doing::before{
+	content:'☐';
+}
+.markdown li.todo.done::before{
+	content:'✔';
+}
+.markdown li.todo p{
+	text-indent:-1.5em;
+}*/
+
+/*代码*/
+.markdown code{
+	background:#F0F0F0;
+	padding:0 5px;;
+	font-family: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monospace;
+}
+.markdown pre code{
+	/*margin-left:34px;*/
+	margin-bottom: 28px;
+	display: block;
+	background:#fff;
+	border:1px solid #E0E0E0;
+	overflow-x: scroll;
+	font-size: 13px;
+}
+/*引用*/
+.markdown blockquote{
+	/*margin-left:34px;*/
+	font-size:13px;
+	margin-bottom: 28px;
+	padding:0 10px;
+	background:#F0F0F0;
+	border-left:3px solid #E0E0E0;
+}
+.markdown blockquote p{
+	text-indent: 0;
+	margin-bottom: 14px;
+}
+/*图片*/
+.markdown img{
+	max-width: 100%;
+	border: 1px solid #E0E0E0;
+	padding: 1px;
+}
+
+/*链接*/
+.markdown a{
+	color:#718C00;
+	text-decoration: none;
+}

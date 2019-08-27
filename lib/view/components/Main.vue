@@ -1,20 +1,19 @@
 <template>
 <main class="main">
-    <span>{{data.data.content}}</span>
     <transition name="slide">
-        <sidebar></sidebar>
+        <sidebar class="sidebar"></sidebar>
     </transition>
     <transition name="slide-flex">
-        <editor v-model="data.data.content"></editor>
+        <editor class="editor" v-model="data.data.content"></editor>
     </transition>
     <transition name="slide-flex">
-        <preview></preview>
+        <preview class="preview" :content="data.data.content"></preview>
     </transition>
 </main>
 </template>
 
 <script type="ts">
-import { createComponent } from '@vue/composition-api';
+import { createComponent, reactive } from '@vue/composition-api';
 
 import { getData } from '../dataInjector';
 
@@ -23,24 +22,16 @@ import Editor from '@toonote/md-editor';
 import Preview from './Preview.vue';
 
 export default createComponent({
-    data(){
-        const data = getData('editor');
-        console.log(data);
-        return {
-            data
-        };
-    },
     components: {
         Sidebar,
         Editor,
         Preview,
     },
     setup(){
-        /* const data = getData('editor');
-        console.log(data);
+        const data = reactive(getData('editor'));
         return {
             data
-        }; */
+        };
     }
 });
 </script>
@@ -82,4 +73,23 @@ body{
 /* .main.withMenubar{
 	height:calc(100% - 24px);
 } */
+.main .sidebar{
+    width: 250px;
+}
+.main .editor,
+.main .preview{
+    flex: 1;
+}
+
+
+/* 全局图标定义 */
+.icon::before{
+	content:' ';
+	display: inline-block;
+	width:16px;
+	height:16px;
+	vertical-align: sub;
+	background-size:16px 16px;
+	background-repeat:no-repeat;
+}
 </style>

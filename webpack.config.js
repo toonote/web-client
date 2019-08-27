@@ -1,9 +1,11 @@
+// @ts-nocheck
 const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 
 module.exports = {
     mode: process.env.NODE_ENV === 'production'?'production':'development',
+    watch: process.env.NODE_ENV !== 'production',
     entry: {
         'view': './lib/view/main.ts',
     },
@@ -37,7 +39,7 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
-                loader: 'file-loader',
+                loader: 'url-loader',
                 options: {
                     name: '[name].[ext]?[hash]'
                 }
