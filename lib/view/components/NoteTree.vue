@@ -22,7 +22,7 @@
 			</li>
 		</ul>
 	</section> -->
-    <section class="wrapper">
+    <section class="wrapper" v-contextmenu:contextMenu>
 		<h2>{{data.data.title}}</h2>
 		<ul>
 			<li
@@ -44,8 +44,8 @@
 						:key="note.id"
 						:class="{active:isActive(note.id)}"
 						v-for="note in notes"
+						@contextmenu="showContextMenu('note', note.id)"
 						@click.stop="switchCurrentNote(note.id)"
-						@contextmenu.stop="showContextMenu(note.id)"
 						@dragstart="dragStart($event, note.id)"
 						@dragover.prevent="dragOver($event, note.id)"
 					>{{note.title}}</li>
@@ -53,15 +53,23 @@
 			</li>
 		</ul>
 	</section>
+	<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
+		<v-contextmenu-item>新建笔记</v-contextmenu-item>
+		<v-contextmenu-item>重命名</v-contextmenu-item>
+		<v-contextmenu-item>删除</v-contextmenu-item>
+	</v-contextmenu>
 </section>
 </template>
 <script>
-import { createComponent } from '@vue/composition-api';
+import { createComponent, reactive } from '@vue/composition-api';
 import { getData } from '../dataInjector';
 
 export default createComponent({
     setup(){
-        const notebook = getData('notebook');
+		const notebook = getData('notebook');
+		const state = reactive({
+			currentContextMenuNoteId: ''
+		});
 
         const switchFold = function(){
 
@@ -70,9 +78,19 @@ export default createComponent({
         const isFold = function(){
             return false;
         };
-        const isActive = function(){
-            return false;
+        const isActive = function(noteId){
+			console.log(noteId, state.currentContextMenuNoteId);
+            return noteId === state.currentContextMenuNoteId;
         };
+
+		const showContextMenu = function(type, id){
+			console.log(state.currentContextMenuNoteId);
+			state.currentContextMenuNoteId = id;
+		};
+
+		const hideContextMenu = function(){
+			state.currentContextMenuNoteId = '';
+		}
 
         const drop = function(){};
 
@@ -80,7 +98,9 @@ export default createComponent({
             data: notebook,
             switchFold,
             isFold,
-            isActive,
+			isActive,
+			showContextMenu,
+			hideContextMenu,
             drop,
         };
     }
