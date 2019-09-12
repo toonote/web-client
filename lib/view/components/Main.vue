@@ -27,7 +27,7 @@ export default createComponent({
         Editor,
         Preview,
     },
-    setup(){
+    setup(props, ctx){
         const data = reactive(getData('editor'));
         return {
             data

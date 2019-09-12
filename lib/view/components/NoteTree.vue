@@ -54,7 +54,7 @@
 		</ul>
 	</section>
 	<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
-		<v-contextmenu-item>新建笔记</v-contextmenu-item>
+		<v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
 		<v-contextmenu-item>重命名</v-contextmenu-item>
 		<v-contextmenu-item>删除</v-contextmenu-item>
 	</v-contextmenu>
@@ -65,7 +65,7 @@ import { createComponent, reactive } from '@vue/composition-api';
 import { getData } from '../dataInjector';
 
 export default createComponent({
-    setup(){
+    setup(props, ctx){
 		const notebook = getData('notebook');
 		const state = reactive({
 			currentContextMenuNoteId: ''
@@ -79,12 +79,12 @@ export default createComponent({
             return false;
         };
         const isActive = function(noteId){
-			console.log(noteId, state.currentContextMenuNoteId);
+			// console.log(noteId, state.currentContextMenuNoteId);
             return noteId === state.currentContextMenuNoteId;
         };
 
 		const showContextMenu = function(type, id){
-			console.log(state.currentContextMenuNoteId);
+			// console.log(state.currentContextMenuNoteId);
 			state.currentContextMenuNoteId = id;
 		};
 
@@ -92,7 +92,17 @@ export default createComponent({
 			state.currentContextMenuNoteId = '';
 		}
 
-        const drop = function(){};
+		const drop = function(){};
+
+		const newNote = function(from){
+			ctx.root.$webClient.$emit('note.new', {
+				from,
+				context: {
+					type: 'note',
+					id: state.currentContextMenuNoteId,
+				}
+			});
+		}	
 
         return {
             data: notebook,
@@ -101,7 +111,8 @@ export default createComponent({
 			isActive,
 			showContextMenu,
 			hideContextMenu,
-            drop,
+			drop,
+			newNote,
         };
     }
 });

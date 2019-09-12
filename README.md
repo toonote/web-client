@@ -106,7 +106,8 @@ Full list of events:
     - `note.new` create a new note
         - `data` event data
             - `context`
-                - `noteId` current active noteId
+                - `type` context type, `category` | `note`
+                - `id` category id or note id
             - `from` the source of event, value can be `menu` | `noteTree` | `shortcut`
     - `note.delete`
     - `note.rename`

@@ -8,9 +8,12 @@ import ContentMenu from 'v-contextmenu';
 Vue.use(VueCompositionApi);
 Vue.use(ContentMenu);
 
-
 function createApp(){
     return new Vue({
+        beforeCreate(){
+            // @ts-ignore
+            this.$root.$webClient = this;
+        },
         render(h){
             return h(Main);
         }
