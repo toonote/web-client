@@ -109,10 +109,14 @@ Full list of events:
                 - `type` context type, `category` | `note`
                 - `id` category id or note id
             - `from` the source of event, value can be `menu` | `noteTree` | `shortcut`
-    - `note.delete`
+    - `note.delete` delete a note
+        - `data` event data
+            - `id` noteId
     - `note.rename`
     - `note.move`
     - `note.switchActive` switch current active note
+        - `data` event data
+            - `id` noteId  
 - `category` prefix, means category related events
 - `notebook` prefix, means notebook related events
 - `editor` prefix, means editor related events

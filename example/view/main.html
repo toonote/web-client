@@ -11,11 +11,12 @@
     <script src="../../dist/view.js"></script>
     <script>
         const webClientView = window.WebClientView.default;
-        const userInfo = {
+        /* const userInfo = {
             name: 'TooBug',
             avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
             labels: ['SVIP']
-        };
+        }; */
+        const userInfo = {};
         webClientView.setData('userInfo', userInfo);
         webClientView.setData('editor', {
             content: 'test'
@@ -40,6 +41,9 @@
             }
         });
         webClientView.app.$on('note.new', console.log);
+        webClientView.app.$on('note.delete', console.log);
+        webClientView.app.$on('note.switchActive', console.log);
+        webClientView.app.$on('user.login', console.log);
         webClientView.app.$mount('#container');
     </script>
 </body>

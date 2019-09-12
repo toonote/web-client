@@ -11,15 +11,15 @@
 	</div>
 </section>
 </template>
-<script lang="ts">
+<script>
 import { getData } from '../dataInjector';
 import { createComponent } from '@vue/composition-api';
 export default createComponent({
-    setup(){
+    setup(props, ctx){
         const userInfo = getData('userInfo');
 
         const doLogin = function(){
-
+			ctx.root.$webClient.$emit('user.login', {});
         };
 
         return {

@@ -15,7 +15,7 @@
 						class="icon note"
 						v-bind:class="{active:isActive(note.id)}"
 						v-for="note in notes"
-						v-on:click="switchCurrentNote(note.id)"
+						v-on:click="switchActiveNote(note.id)"
 						v-on:contextmenu="showContextMenu(note.id)"
 					>{{note.title}}</li>
 				</ul>
@@ -45,7 +45,7 @@
 						:class="{active:isActive(note.id)}"
 						v-for="note in notes"
 						@contextmenu="showContextMenu('note', note.id)"
-						@click.stop="switchCurrentNote(note.id)"
+						@click.stop="switchActiveNote(note.id)"
 						@dragstart="dragStart($event, note.id)"
 						@dragover.prevent="dragOver($event, note.id)"
 					>{{note.title}}</li>
@@ -56,7 +56,7 @@
 	<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
 		<v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
 		<v-contextmenu-item>重命名</v-contextmenu-item>
-		<v-contextmenu-item>删除</v-contextmenu-item>
+		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
 	</v-contextmenu>
 </section>
 </template>
@@ -102,7 +102,19 @@ export default createComponent({
 					id: state.currentContextMenuNoteId,
 				}
 			});
-		}	
+		}
+
+		const deleteNote = function(){
+			ctx.root.$webClient.$emit('note.delete', {
+				id: state.currentContextMenuNoteId,
+			});
+		}
+
+		const switchActiveNote = function(id){
+			ctx.root.$webClient.$emit('note.switchActive', {
+				id
+			});
+		}
 
         return {
             data: notebook,
@@ -113,6 +125,8 @@ export default createComponent({
 			hideContextMenu,
 			drop,
 			newNote,
+			deleteNote,
+			switchActiveNote,
         };
     }
 });
