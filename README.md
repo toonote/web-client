@@ -136,7 +136,7 @@ In most cases, you should inject an data item to control the behavior of View La
 
 ## Controller Layer
 
-hold the global state, work with Model Layer and UI layer.
+Hold the global state, work with Model Layer and UI layer. Since it's called WebClient, it will work like tranditional web application: just hold little data in client side. Most user actions will trigger network communications.
 
 ## Model Layer
 

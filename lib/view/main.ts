@@ -3,7 +3,7 @@ import { setData } from './dataInjector';
 
 const { app } = createApp();
 
-interface WebClientView {
+export interface WebClientView {
     app: any,
     setData: Function,
 }

@@ -7,11 +7,12 @@ module.exports = {
     mode: process.env.NODE_ENV === 'production'?'production':'development',
     watch: process.env.NODE_ENV !== 'production',
     entry: {
-        'view': './lib/view/main.ts',
+        // 'view': './lib/view/main.ts',
+        'standard': './lib/entry/standard.ts',
     },
     output: {
         path: path.resolve(__dirname, './dist'),
-        library: 'WebClientView',
+        library: 'WebClient',
         libraryTarget: 'umd',
     },
     module: {
