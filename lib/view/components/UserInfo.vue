@@ -4,7 +4,7 @@
 	<img v-else class="avatar" src="../images/avatar.png" />
 	<div class="userName">
 		<span v-if="data.data.name">{{data.data.name}}</span>
-		<a v-else v-on:click="doLogin" href="#">点击登录</a>
+		<a v-else @click="doLogin" href="#">点击登录</a>
 	</div>
 	<div class="labelWrapper">
 		<div v-for="label in data.data.labels" :key="label" class="label">{{label}}</div>

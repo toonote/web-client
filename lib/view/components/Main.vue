@@ -4,11 +4,12 @@
         <sidebar class="sidebar"></sidebar>
     </transition>
     <transition name="slide-flex">
-        <editor class="editor" v-model="data.data.content"></editor>
+        <editor class="editor" v-model="editor.data.content"></editor>
     </transition>
     <transition name="slide-flex">
-        <preview class="preview" :content="data.data.content"></preview>
+        <preview class="preview" :content="editor.data.content"></preview>
     </transition>
+    <login v-if="!userInfo.data.isLogin"></login>
 </main>
 </template>
 
@@ -20,17 +21,21 @@ import { getData } from '../dataInjector';
 import Sidebar from './Sidebar.vue';
 import Editor from '@toonote/md-editor';
 import Preview from './Preview.vue';
+import Login from './Login.vue';
 
 export default createComponent({
     components: {
         Sidebar,
         Editor,
         Preview,
+        Login,
     },
     setup(props, ctx){
-        const data = reactive(getData('editor'));
+        const editor = reactive(getData('editor'));
+        const userInfo = reactive(getData('userInfo'));
         return {
-            data
+            editor,
+            userInfo,
         };
     }
 });

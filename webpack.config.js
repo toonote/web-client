@@ -14,6 +14,7 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         library: 'WebClient',
         libraryTarget: 'umd',
+        publicPath: '../dist/',
     },
     module: {
         rules: [
@@ -42,7 +43,8 @@ module.exports = {
                 test: /\.(png|jpg|gif|svg|eot|woff|ttf)$/,
                 loader: 'url-loader',
                 options: {
-                    name: '[name].[ext]?[hash]'
+                    name: '[name].[ext]?[hash]',
+                    limit: '10240',
                 }
             }
         ]

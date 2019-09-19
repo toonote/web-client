@@ -27,6 +27,7 @@
         "axios-rest-client": "^0.1.11",
         "css-loader": "^3.2.0",
         "eslint": "^6.2.2",
+        "file-loader": "^4.2.0",
         "highlight.js": "^9.15.10",
         "mermaid": "^8.2.5",
         "remarkable": "^2.0.0",
