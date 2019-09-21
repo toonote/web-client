@@ -28,6 +28,7 @@ export default class WebClientController{
     private _initViewListener() {
         const app = this._view.app;
 
+        // 用户登录
         app.$on('user.login', (data: any) => {
             this._view.setData('userInfo', {
                 isLogin: true,
@@ -41,6 +42,14 @@ export default class WebClientController{
                 this._model.setToken(token);
                 this._refreshData();
             }
+        });
+
+        // 切换笔记
+        app.$on('note.switchActive', async (data: any) => {
+            const note = (await this._model.Note.find(data.id)).data.data;
+            this._view.setData('editor', {
+                content: note.content
+            });
         });
     }
 

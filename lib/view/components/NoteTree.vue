@@ -35,14 +35,14 @@
 					name="note-list"
 					tag="ul"
 					droppable="true"
-					v-show="!isFold(category)"
+					v-show="!foldMap[category]"
 					v-on:drop="drop"
 					>
 					<li
 						draggable="true"
 						class="icon note"
 						:key="note.id"
-						:class="{active:isActive(note.id)}"
+						:class="{active:note.id === state.currentActiveNoteId}"
 						v-for="note in notes"
 						@contextmenu="showContextMenu('note', note.id)"
 						@click.stop="switchActiveNote(note.id)"
@@ -61,27 +61,40 @@
 </section>
 </template>
 <script>
-import { createComponent, reactive } from '@vue/composition-api';
+import { createComponent, reactive, ref } from '@vue/composition-api';
 import { getData } from '../dataInjector';
 
 export default createComponent({
     setup(props, ctx){
 		const notebook = reactive(getData('notebook'));
 		const state = reactive({
-			currentContextMenuNoteId: ''
+			currentContextMenuNoteId: '',
+			currentActiveNoteId: '',
 		});
 
-        const switchFold = function(){
+		const foldMap = ref({});
 
+        const switchFold = function(category){
+			let value;
+			if(!foldMap.value[category]){
+				value = true;
+			}else{
+				value = false;
+			}
+			foldMap.value = {
+				...foldMap.value,
+				[category]: value
+			};
         };
 
-        const isFold = function(){
-            return false;
-        };
-        const isActive = function(noteId){
+        /* const isFold = function(category){
+			console.log('isFold');
+			return foldMap[category];
+        }; */
+        /* const isActive = function(noteId){
 			// console.log(noteId, state.currentContextMenuNoteId);
             return noteId === state.currentContextMenuNoteId;
-        };
+        }; */
 
 		const showContextMenu = function(type, id){
 			// console.log(state.currentContextMenuNoteId);
@@ -111,16 +124,17 @@ export default createComponent({
 		}
 
 		const switchActiveNote = function(id){
+			state.currentActiveNoteId = id;
 			ctx.root.$webClient.$emit('note.switchActive', {
 				id
 			});
 		}
 
         return {
+			state,
             notebook,
+            foldMap,
             switchFold,
-            isFold,
-			isActive,
 			showContextMenu,
 			hideContextMenu,
 			drop,
