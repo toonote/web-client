@@ -54,9 +54,9 @@ export default class WebClientController{
 
     private _initModel(){
         this._fillEmptyData();
-        this._model.Notebook.get();
-        this._model.Category.get()
-        this._model.Note.get()
+        // this._model.Notebook.get();
+        // this._model.Category.get()
+        // this._model.Note.get()
 
         // 组装成树形
 

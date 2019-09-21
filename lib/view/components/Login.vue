@@ -2,7 +2,7 @@
 <section class="login">
     <div class="wrapper">
         <div class="loginImage">
-            <img src="../images/login_1.jpg" />
+            <img v-if="showLoginImage" src="../images/login_1.jpg" />
         </div>
         <div class="loginBody">
             <div class="qrCode">
@@ -19,7 +19,7 @@
 </section>
 </template>
 <script lang="ts">
-import { createComponent, computed } from '@vue/composition-api';
+import { createComponent, computed, reactive, ref } from '@vue/composition-api';
 import axios from 'axios';
 
 declare var process:any
@@ -27,10 +27,40 @@ declare var process:any
 export default createComponent({
     setup(props: any, ctx: any){
 
+        const showLoginImage = ref(false);
+
+        const BASE_URL = process.env.NODE_ENV === 'production' ?
+            'https://api.xiaotu.io':
+            'https://test-api.xiaotu.io';
+
+        const validateLogin = async function(){
+            const token = localStorage.getItem('TOONOTE-TOKEN');
+            if(!token){
+                return false;
+            }
+            try{
+                const response = await axios.get(`${BASE_URL}/user/info`, {
+                    headers: {
+                        'x-toonote-token': token
+                    }
+                });
+                ctx.root.$webClient.$emit('user.login', {
+                    userInfo: response.data
+                });
+            }catch(e){
+                console.log(e);
+                return false;
+            }
+            return true;
+        }
+
         const initWxLogin = async function(){
-            const BASE_URL = process.env.NODE_ENV === 'production' ?
-                'https://api.xiaotu.io':
-                'https://test-api.xiaotu.io';
+
+            const isLogin = await validateLogin();
+            if(isLogin) return;
+            
+            // 显示登录图片
+            showLoginImage.value = true;
 
             // step 1，获取场景值
             let response = await axios.get(`${BASE_URL}/user/getLoginScene?_=${Date.now()}`);
@@ -53,14 +83,7 @@ export default createComponent({
                 if(response.data.isLogin){
                     const token = response.data.token;
                     localStorage.setItem('TOONOTE-TOKEN', response.data.token);
-                    response = await axios.get(`${BASE_URL}/user/info`, {
-                        headers: {
-                            'x-toonote-token': token
-                        }
-                    });
-                    ctx.root.$webClient.$emit('user.login', {
-                        userInfo: response.data
-                    });
+                    await validateLogin();
                 }else{
                     setTimeout(getResult, 2000);
                 }
@@ -71,6 +94,7 @@ export default createComponent({
         initWxLogin();
 
         return {
+            showLoginImage,
         };
     }
 });
