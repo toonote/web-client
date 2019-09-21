@@ -11,7 +11,7 @@ import view from '../view/main';
 
 const model = new WebClientModel({
     localStorage: 'ls',
-    endpoint: 'http://localhost:14003',
+    endpoint: 'https://test-api.xiaotu.io/api/v2/',
     headers: {}
 })
 

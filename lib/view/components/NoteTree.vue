@@ -23,11 +23,11 @@
 		</ul>
 	</section> -->
     <section class="wrapper" v-contextmenu:contextMenu>
-		<h2>{{data.data.title}}</h2>
+		<h2>{{notebook.data.title}}</h2>
 		<ul>
 			<li
 				class="icon folder"
-				v-for="(notes,category) in data.data.categories"
+				v-for="(notes,category) in notebook.data.categories"
                 :key="category"
 				@click="switchFold(category)"
 			>{{category}}
@@ -66,7 +66,7 @@ import { getData } from '../dataInjector';
 
 export default createComponent({
     setup(props, ctx){
-		const notebook = getData('notebook');
+		const notebook = reactive(getData('notebook'));
 		const state = reactive({
 			currentContextMenuNoteId: ''
 		});
@@ -117,7 +117,7 @@ export default createComponent({
 		}
 
         return {
-            data: notebook,
+            notebook,
             switchFold,
             isFold,
 			isActive,
