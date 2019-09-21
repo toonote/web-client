@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: process.env.NODE_ENV === 'production'?'production':'development',
@@ -12,9 +13,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, './dist'),
-        library: 'WebClient',
-        libraryTarget: 'umd',
-        publicPath: '../dist/',
+        publicPath: '/dist',
     },
     module: {
         rules: [
@@ -55,16 +54,25 @@ module.exports = {
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
-    /* devServer: {
-        historyApiFallback: true,
-        noInfo: true
-    }, */
+    devServer: {
+        port: 6224,
+        inline: true,
+        hot: true,
+        // historyApiFallback: true,
+        // noInfo: true
+    },
     /* performance: {
         hints: false
     }, */
     devtool: '#eval-source-map',
     plugins: [
         new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'lib/template/standard.html'),
+            filename: path.join(__dirname, 'dist/standard.html'),
+            chunks: ['standard'],
+            alwaysWriteToDisk: true
+        }),
     ]
 }
 

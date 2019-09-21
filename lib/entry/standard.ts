@@ -16,5 +16,4 @@ const model = new WebClientModel({
 })
 
 const controller = new WebClientController(view, model);
-
-window.webClient = controller;
+controller.mount('#container');
