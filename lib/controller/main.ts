@@ -40,9 +40,16 @@ export default class WebClientController{
     }
 
     private _initViewListener() {
-        // const app = this._view.app;
+        const app = this._view.app;
 
-        // app.$on('')
+        app.$on('user.login', (data: any) => {
+            this._view.setData('userInfo', {
+                isLogin: true,
+                name: data.userInfo.name,
+                avatarUrl: data.userInfo.avatarUrl,
+                labels: [],
+            });
+        });
     }
 
     private _initModel(){

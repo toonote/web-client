@@ -25,7 +25,7 @@ import axios from 'axios';
 declare var process:any
 
 export default createComponent({
-    setup(props: any, context: any){
+    setup(props: any, ctx: any){
 
         const initWxLogin = async function(){
             const BASE_URL = process.env.NODE_ENV === 'production' ?
@@ -41,7 +41,7 @@ export default createComponent({
             let scene = response.data.scene;
 
             // step 2，显示二维码
-            context.refs.loginQrCode.src = `${BASE_URL}/user/weappLogin?scene=${scene}`;
+            ctx.refs.loginQrCode.src = `${BASE_URL}/user/weappLogin?scene=${scene}`;
 
             // step3，定时刷新
             let getResult = async function(){
@@ -51,10 +51,16 @@ export default createComponent({
                     return;
                 }
                 if(response.data.isLogin){
-                    console.log('登录成功！');
-                    console.log(response.data);
-
-                    // location.href = `${BASE_URL}/oauth/weappToken?scene=${scene}&client=mac`;
+                    const token = response.data.token;
+                    localStorage.setItem('TOONOTE-TOKEN', response.data.token);
+                    response = await axios.get(`${BASE_URL}/user/info`, {
+                        headers: {
+                            'x-toonote-token': token
+                        }
+                    });
+                    ctx.root.$webClient.$emit('user.login', {
+                        userInfo: response.data
+                    });
                 }else{
                     setTimeout(getResult, 2000);
                 }
