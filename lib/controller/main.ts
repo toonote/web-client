@@ -9,6 +9,7 @@ interface User {
 };
 
 interface State {
+    noteState: 'LOADING' | 'OPEN',
     currentNoteId: string,
     editorContent: string,
 };
@@ -30,6 +31,7 @@ export default class WebClientController{
             categories: {}
         };
         this._state = {
+            noteState: 'LOADING',
             currentNoteId: '',
             editorContent: '',
         };
@@ -62,6 +64,10 @@ export default class WebClientController{
 
         // 切换笔记
         app.$on('note.switchActive', async (data: any) => {
+            this._state.noteState = 'LOADING';
+            this._view.setData('editor', {
+                content: ''
+            });
             const note = (await this._model.Note.find(data.id)).data.data;
             this._view.setData('editor', {
                 content: note.content
@@ -71,16 +77,17 @@ export default class WebClientController{
 
         // 笔记内容发生变化
         app.$on('editor.change', async (data: any) => {
-            // console.log('currentNoteId', this._state.currentNoteId);
-            // console.log('content', data.content);
-            // todo: 第一次变更不需要保存
-            // todo: 内容与id必须得对应，要不然会串
-            if(!this._state.currentNoteId) return;
-            if(!data.content) return;
+            console.log('editor.change', this._state.currentNoteId, data.content, this._state.noteState);
+            if(this._state.noteState === 'LOADING'){
+                if(this._state.currentNoteId && data.content){
+                    this._state.noteState = 'OPEN';
+                }
+                return;
+            }
+            // if(!data.content) return;
             await this._model.Note.update(this._state.currentNoteId, {
                 content: data.content
             });
-            // console.log('content change saved.');
         });
     }
 

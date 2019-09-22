@@ -34,10 +34,15 @@ export default createComponent({
         const editor = reactive(getData('editor'));
         const userInfo = reactive(getData('userInfo'));
 
+        let lastContent = editor.data.content;
+
         watch(() => {
-            ctx.root.$webClient.$emit('editor.change', {
-                content: editor.data.content
-            });
+            if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
+                ctx.root.$webClient.$emit('editor.change', {
+                    content: editor.data.content
+                });
+                lastContent = editor.data.content;
+            }
         });
 
         return {
