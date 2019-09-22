@@ -3,21 +3,36 @@ import WebClientModel, { Notebook } from '../model/main';
 
 interface User {
     isLogin: boolean,
-    name: string,
-    avatarUrl: string,
-    labels: string[],
+    name?: string,
+    avatarUrl?: string,
+    labels?: string[],
+};
+
+interface State {
+    currentNoteId: string,
+    editorContent: string,
 };
 
 export default class WebClientController{
     private _view:WebClientView;
     private _model:WebClientModel;
-    // private _user: User;
-    // private _notebook: Notebook;
-    private _editorContent: string;
+    private _user:User;
+    private _notebook: Notebook;
+    private _state: State;
     constructor(view:WebClientView, model:WebClientModel){
         this._view = view;
         this._model = model;
-        this._editorContent = '';
+        this._user = {
+            isLogin: false,
+        };
+        this._notebook = {
+            title: 'loading',
+            categories: {}
+        };
+        this._state = {
+            currentNoteId: '',
+            editorContent: '',
+        };
         this._initModel();
         this._initViewListener();
     }
@@ -30,12 +45,13 @@ export default class WebClientController{
 
         // 用户登录
         app.$on('user.login', (data: any) => {
-            this._view.setData('userInfo', {
+            this._user = {
                 isLogin: true,
                 name: data.userInfo.name,
                 avatarUrl: data.userInfo.avatarUrl,
                 labels: [],
-            });
+            };
+            this._view.setData('userInfo', this._user);
 
             const token = localStorage.getItem('TOONOTE-TOKEN');
             if(token){
@@ -50,6 +66,21 @@ export default class WebClientController{
             this._view.setData('editor', {
                 content: note.content
             });
+            this._state.currentNoteId = note.id;
+        });
+
+        // 笔记内容发生变化
+        app.$on('editor.change', async (data: any) => {
+            // console.log('currentNoteId', this._state.currentNoteId);
+            // console.log('content', data.content);
+            // todo: 第一次变更不需要保存
+            // todo: 内容与id必须得对应，要不然会串
+            if(!this._state.currentNoteId) return;
+            if(!data.content) return;
+            await this._model.Note.update(this._state.currentNoteId, {
+                content: data.content
+            });
+            // console.log('content change saved.');
         });
     }
 
@@ -59,11 +90,12 @@ export default class WebClientController{
 
     
     private _fillEmptyData(){
+        this._view.setData('state', this._state);
         this._view.setData('editor', {
-            content: '',
+            content: this._state.editorContent,
         });
-        this._view.setData('userInfo', {});
-        this._view.setData('notebook', {});
+        this._view.setData('userInfo', this._user);
+        this._view.setData('notebook', this._notebook);
     }
 
     private async _refreshData(notebookId?: string){

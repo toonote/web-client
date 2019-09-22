@@ -14,7 +14,7 @@
 </template>
 
 <script type="ts">
-import { createComponent, reactive } from '@vue/composition-api';
+import { createComponent, reactive, watch } from '@vue/composition-api';
 
 import { getData } from '../dataInjector';
 
@@ -33,6 +33,13 @@ export default createComponent({
     setup(props, ctx){
         const editor = reactive(getData('editor'));
         const userInfo = reactive(getData('userInfo'));
+
+        watch(() => {
+            ctx.root.$webClient.$emit('editor.change', {
+                content: editor.data.content
+            });
+        });
+
         return {
             editor,
             userInfo,

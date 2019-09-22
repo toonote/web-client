@@ -42,7 +42,7 @@
 						draggable="true"
 						class="icon note"
 						:key="note.id"
-						:class="{active:note.id === state.currentActiveNoteId}"
+						:class="{active:note.id === state.data.currentNoteId}"
 						v-for="note in notes"
 						@contextmenu="showContextMenu('note', note.id)"
 						@click.stop="switchActiveNote(note.id)"
@@ -66,10 +66,10 @@ import { getData } from '../dataInjector';
 
 export default createComponent({
     setup(props, ctx){
+		const state = reactive(getData('state'));
 		const notebook = reactive(getData('notebook'));
-		const state = reactive({
+		const localState = reactive({
 			currentContextMenuNoteId: '',
-			currentActiveNoteId: '',
 		});
 
 		const foldMap = ref({});
@@ -97,12 +97,11 @@ export default createComponent({
         }; */
 
 		const showContextMenu = function(type, id){
-			// console.log(state.currentContextMenuNoteId);
-			state.currentContextMenuNoteId = id;
+			localState.currentContextMenuNoteId = id;
 		};
 
 		const hideContextMenu = function(){
-			state.currentContextMenuNoteId = '';
+			localState.currentContextMenuNoteId = '';
 		}
 
 		const drop = function(){};
@@ -119,12 +118,12 @@ export default createComponent({
 
 		const deleteNote = function(){
 			ctx.root.$webClient.$emit('note.delete', {
-				id: state.currentContextMenuNoteId,
+				id: localState.currentContextMenuNoteId,
 			});
 		}
 
 		const switchActiveNote = function(id){
-			state.currentActiveNoteId = id;
+			state.data.currentNoteId = id;
 			ctx.root.$webClient.$emit('note.switchActive', {
 				id
 			});
@@ -132,6 +131,7 @@ export default createComponent({
 
         return {
 			state,
+			localState,
             notebook,
             foldMap,
             switchFold,
