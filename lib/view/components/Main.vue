@@ -19,14 +19,14 @@ import { createComponent, reactive, watch } from '@vue/composition-api';
 import { getData } from '../dataInjector';
 
 import Sidebar from './Sidebar.vue';
-import Editor from '@toonote/md-editor';
+// import Editor from '@toonote/md-editor';
 import Preview from './Preview.vue';
 import Login from './Login.vue';
 
 export default createComponent({
     components: {
         Sidebar,
-        Editor,
+        Editor: () => import('@toonote/md-editor'),
         Preview,
         Login,
     },
