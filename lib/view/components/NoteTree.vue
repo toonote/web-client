@@ -152,7 +152,7 @@ export default createComponent({
 }
 .wrapper h2,
 .wrapper .notFound{
-	font-size:12px;
+	font-size:14px;
 	padding-left:15px;
 	font-weight: normal;
 }
@@ -160,7 +160,7 @@ export default createComponent({
 	list-style: none;
 }
 .wrapper li{
-	font-size:13px;
+	font-size:14px;
 	text-indent: 25px;
 	/*padding-left:25px;*/
 	cursor:default;
@@ -183,5 +183,23 @@ export default createComponent({
 }
 .wrapper .note-list-move {
 	transition: transform .4s;
+}
+
+.contextMenu{
+	position: absolute;
+	background: #F6F6F6;
+	border: 1px solid #E0E0E0;
+	font-size: 14px;
+}
+.contextMenu ul{
+	list-style: none;
+}
+.contextMenu ul li{
+	padding: 10px 20px;
+	cursor: pointer;
+}
+.contextMenu ul li:hover,
+.contextMenu ul li.active{
+	background: #CECECE;
 }
 </style>
