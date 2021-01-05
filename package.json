@@ -25,7 +25,7 @@
         "@types/mermaid": "^8.2.0",
         "@types/remarkable": "^1.7.4",
         "@vue/composition-api": "^0.2.1",
-        "axios": "^0.19.0",
+        "axios": "^0.21.1",
         "axios-rest-client": "^0.1.11",
         "css-loader": "^3.2.0",
         "eslint": "^6.2.2",
