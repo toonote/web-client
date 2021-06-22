@@ -1,18 +1,18 @@
 <template>
-<aside>
-    <user-info></user-info>
-    <note-tree></note-tree>
-</aside>
+  <aside>
+    <user-info/>
+    <note-tree/>
+  </aside>
 </template>
 <script type="ts">
 import UserInfo from './UserInfo.vue';
 import NoteTree from './NoteTree.vue';
 
 export default {
-    components: {
-        UserInfo,
-        NoteTree,
-    }
+  components: {
+    UserInfo,
+    NoteTree,
+  }
 };
 </script>
 <style scoped>

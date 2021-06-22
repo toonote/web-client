@@ -1,4 +1,4 @@
-import { WebClientView } from '../view/main';
+import { WebClientView } from '../view/WebClientView';
 import WebClientModel, { Notebook } from '../model/main';
 
 interface User {
@@ -95,7 +95,7 @@ export default class WebClientController{
         this._fillEmptyData();
     }
 
-    
+
     private _fillEmptyData(){
         this._view.setData('state', this._state);
         this._view.setData('editor', {
