@@ -1,5 +1,8 @@
 {
     "name": "@toonote/web-client",
     "version": "1.0.0-alpha1",
-    "module": "index.ts"
+    "module": "index.ts",
+    "devDependencies": {
+        "vue": "^3.1.1"
+    }
 }

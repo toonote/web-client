@@ -1,27 +1,19 @@
-import 'v-contextmenu/dist/index.css';
+// import 'v-contextmenu/dist/index.css';
 
-import Vue from 'vue';
-import VueCompositionApi from '@vue/composition-api';
+import { createApp } from 'vue';
 import Main from './components/Main.vue';
-import ContentMenu from 'v-contextmenu';
+// import ContentMenu from 'v-contextmenu';
 
-Vue.use(VueCompositionApi);
-Vue.use(ContentMenu);
+// Vue.use(ContentMenu);
 
-function createApp(){
-    return new Vue({
-        beforeCreate(){
+export function createVueApp(){
+    return createApp({
+        /* beforeCreate(){
             // @ts-ignore
             this.$root.$webClient = this;
-        },
+        }, */
         render(h){
             return h(Main);
         }
     });
-}
-
-export default function(){
-    return {
-        app: createApp(),
-    }
 }
