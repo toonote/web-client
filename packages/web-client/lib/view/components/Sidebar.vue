@@ -1,7 +1,7 @@
 <template>
   <aside>
-    <user-info/>
-    <note-tree/>
+    <user-info />
+    <note-tree />
   </aside>
 </template>
 <script type="ts">

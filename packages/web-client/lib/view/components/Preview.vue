@@ -1,7 +1,11 @@
 <template>
-<section class="preview">
-    <div class="markdown" v-html="html" v-on:click="handleContent"></div>
-</section>
+  <section class="preview">
+    <div
+      class="markdown"
+      @click="handleContent"
+      v-html="html"
+    />
+  </section>
 </template>
 <script lang="ts">
 import { computed } from 'vue';
@@ -11,7 +15,7 @@ export default {
     props: ['content'],
     setup(props, context){
         const html = computed(() => {
-            // @ts-ignore
+          return '';
             // return renderer.render(props.content);
         });
 

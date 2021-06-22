@@ -1,7 +1,7 @@
 <template>
-<main class="main">
+  <main class="main">
     <transition name="slide">
-        <sidebar class="sidebar"></sidebar>
+      <sidebar class="sidebar" />
     </transition>
     <!-- <transition name="slide-flex">
         <editor class="editor" v-model="editor.data.content"></editor>
@@ -10,7 +10,7 @@
         <preview class="preview" :content="editor.data.content"></preview>
     </transition> -->
     <!-- <login v-if="!userInfo.data.isLogin"></login> -->
-</main>
+  </main>
 </template>
 
 <script type="ts">
@@ -20,14 +20,14 @@ import { reactive, watch } from 'vue';
 
 import Sidebar from './Sidebar.vue';
 // import Editor from '@toonote/md-editor';
-import Preview from './Preview.vue';
+// import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
 export default {
     components: {
         Sidebar,
         // Editor: () => import('@toonote/md-editor'),
-        Preview,
+        // Preview,
         // Login,
     },
     setup(props, ctx){

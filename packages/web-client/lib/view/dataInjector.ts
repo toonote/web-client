@@ -1,13 +1,13 @@
 interface DataPartition {
-    data: Object
-};
+    data: unknown
+}
 
 interface Data {
     [key:string]: DataPartition
-};
+}
 const data:Data = {};
 
-export const setData = function(key: string, value: Object){
+export const setData = function(key: string, value: unknown){
     if(!data[key]){
         data[key] = {
             data: value

@@ -1,22 +1,25 @@
 <template>
-<section class="login">
+  <section class="login">
     <div class="wrapper">
-        <div class="loginImage">
-            <img v-if="showLoginImage" src="../images/login_1.jpg" />
+      <div class="loginImage">
+        <img
+          v-if="showLoginImage"
+          src="../images/login_1.jpg"
+        >
+      </div>
+      <div class="loginBody">
+        <div class="qrCode">
+          <img ref="loginQrCode">
         </div>
-        <div class="loginBody">
-            <div class="qrCode">
-                <img ref="loginQrCode" />
-            </div>
-        </div>
-        <!-- <div class="footer">
+      </div>
+      <!-- <div class="footer">
             <p>
                 <a href="https://api.xiaotu.io/oauth/redirect/github?client=mac">使用Github登录</a>
                 <a href="https://github.com/TooNote/TooNote/issues/new" class="externalLink">无法登录？</a>
             </p>
         </div> -->
     </div>
-</section>
+  </section>
 </template>
 <script lang="ts">
 import { computed, reactive, ref } from 'vue';

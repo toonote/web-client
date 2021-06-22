@@ -1,5 +1,5 @@
 <template>
-<section class="noteTree">
+  <section class="noteTree">
     <!-- <section class="searchWrapper">
 		<input type="search" v-model.trim="keyword" placeholder="搜索..." />
 	</section>
@@ -58,7 +58,7 @@
 		<v-contextmenu-item>重命名</v-contextmenu-item>
 		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
 	</v-contextmenu> -->
-</section>
+  </section>
 </template>
 <script>
 import { reactive, ref } from 'vue';

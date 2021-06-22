@@ -1,4 +1,4 @@
-/* //@ts-ignore
+/*
 import { Remarkable, StateBlock, Token, FenceToken, ListItemToken, ListItemOpenToken } from 'remarkable';
 // import hljs from 'highlight.js';
 // import mermaid from 'mermaid';

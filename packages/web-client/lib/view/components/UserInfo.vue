@@ -1,5 +1,5 @@
 <template>
-<section class="userInfo">
+  <section class="userInfo">
     <!-- <img v-if="data.data.avatarUrl" class="avatar" :src="data.data.avatarUrl" />
 	<img v-else class="avatar" src="../images/avatar.png" />
 	<div class="userName">
@@ -9,7 +9,7 @@
 	<div class="labelWrapper">
 		<div v-for="label in data.data.labels" :key="label" class="label">{{label}}</div>
 	</div> -->
-</section>
+  </section>
 </template>
 <script>
 import { getData } from '../dataInjector';

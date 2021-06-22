@@ -1,32 +1,33 @@
 {
-    "private": true,
-    "version": "1.0.0-alpha.1",
-    "workspaces": [
-        "packages/*"
-    ],
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+ssh://git@github.com/TooNote/WebClient.git"
-    },
-    "author": "TooBug <i@toobug.net>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/TooNote/WebClient/issues"
-    },
-    "homepage": "https://github.com/TooNote/WebClient#readme",
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^4.28.0",
-        "@typescript-eslint/parser": "^4.28.0",
-        "@vitejs/plugin-vue": "^1.2.3",
-        "eslint": "^7.29.0",
-        "eslint-plugin-vue": "^7.11.1",
-        "jest": "^27.0.4",
-        "typescript": "^4.3.4",
-        "vite": "^2.3.8"
-    }
+  "private": true,
+  "version": "1.0.0-alpha.1",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint":"eslint --ext .js,.ts,.vue packages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/TooNote/WebClient.git"
+  },
+  "author": "TooBug <i@toobug.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TooNote/WebClient/issues"
+  },
+  "homepage": "https://github.com/TooNote/WebClient#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "eslint": "^7.29.0",
+    "eslint-plugin-vue": "^7.11.1",
+    "jest": "^27.0.4",
+    "typescript": "^4.3.4",
+    "vite": "^2.3.8"
+  }
 }

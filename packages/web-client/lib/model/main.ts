@@ -17,7 +17,7 @@ export interface Notebook {
 interface ModelConfig {
     localStorage: LocalStorage,
     endpoint: string,
-    headers: Object,
+    headers: unknown,
 }
 
 export default class WebClientModel {
@@ -51,9 +51,9 @@ export default class WebClientModel {
             // xsrfCookieName: 'csrfToken',
             // xsrfHeaderName: 'X-CSRF-TOKEN',
         });
-        
+
         client._axios.interceptors.request.use((config: any) => {
-            for(let key in headers){
+            for(const key in headers){
                 config.headers[key] = headers[key];
             }
             return config;

@@ -6,13 +6,13 @@ interface User {
     name?: string,
     avatarUrl?: string,
     labels?: string[],
-};
+}
 
 interface State {
     noteState: 'LOADING' | 'OPEN',
     currentNoteId: string,
     editorContent: string,
-};
+}
 
 export default class WebClientController{
     private _view:WebClientView;
