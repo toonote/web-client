@@ -1,0 +1,5 @@
+{
+    "name": "@toonote/web-client",
+    "version": "1.0.0-alpha1",
+    "module": "index.ts"
+}
