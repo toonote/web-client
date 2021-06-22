@@ -5,17 +5,15 @@
 </aside>
 </template>
 <script type="ts">
-import { createComponent } from '@vue/composition-api';
-
 import UserInfo from './UserInfo.vue';
 import NoteTree from './NoteTree.vue';
 
-export default createComponent({
+export default {
     components: {
         UserInfo,
         NoteTree,
     }
-});
+};
 </script>
 <style scoped>
 .sidebar{

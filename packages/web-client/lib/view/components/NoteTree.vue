@@ -22,7 +22,7 @@
 			</li>
 		</ul>
 	</section> -->
-    <section class="wrapper" v-contextmenu:contextMenu>
+    <!-- <section class="wrapper" v-contextmenu:contextMenu>
 		<h2>{{notebook.data.title}}</h2>
 		<ul>
 			<li
@@ -57,16 +57,16 @@
 		<v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
 		<v-contextmenu-item>重命名</v-contextmenu-item>
 		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
-	</v-contextmenu>
+	</v-contextmenu> -->
 </section>
 </template>
 <script>
-import { createComponent, reactive, ref } from '@vue/composition-api';
-import { getData } from '../dataInjector';
+import { reactive, ref } from 'vue';
+// import { getData } from '../dataInjector';
 
-export default createComponent({
+export default {
     setup(props, ctx){
-		const state = reactive(getData('state'));
+		/* const state = reactive(getData('state'));
 		const notebook = reactive(getData('notebook'));
 		const localState = reactive({
 			currentContextMenuNoteId: '',
@@ -85,7 +85,7 @@ export default createComponent({
 				...foldMap.value,
 				[category]: value
 			};
-        };
+        }; */
 
         /* const isFold = function(category){
 			console.log('isFold');
@@ -96,7 +96,7 @@ export default createComponent({
             return noteId === state.currentContextMenuNoteId;
         }; */
 
-		const showContextMenu = function(type, id){
+		/* const showContextMenu = function(type, id){
 			localState.currentContextMenuNoteId = id;
 		};
 
@@ -141,9 +141,9 @@ export default createComponent({
 			newNote,
 			deleteNote,
 			switchActiveNote,
-        };
+        }; */
     }
-});
+};
 </script>
 <style scoped>
 .wrapper{

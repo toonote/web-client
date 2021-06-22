@@ -1,10 +1,10 @@
-//@ts-ignore
+/* //@ts-ignore
 import { Remarkable, StateBlock, Token, FenceToken, ListItemToken, ListItemOpenToken } from 'remarkable';
 // import hljs from 'highlight.js';
 // import mermaid from 'mermaid';
 
 let renderer = new Remarkable({
-    /* highlight: function (str:string, lang:string) {
+    / highlight: function (str:string, lang:string) {
         console.log(str);
         if (lang && hljs.getLanguage(lang)) {
             try {
@@ -17,7 +17,7 @@ let renderer = new Remarkable({
         } catch (err) { }
 
         return ''; // use external default escaping
-    } */
+    } /
 });
 
 
@@ -65,7 +65,7 @@ for (let token in customerRulesMap) {
         if (tag === 'tr') {
             // console.log(tokens[idx]);
         }
-        if (tokens[idx].lines /* && tokens[idx].level === 0*/) {
+        if (tokens[idx].lines) {
             line = tokens[idx].lines[0];
             return `<${tag} class="line" data-line="${line}">`;
         }
@@ -73,7 +73,7 @@ for (let token in customerRulesMap) {
     };
 }
 renderer.renderer.rules.fence_custom = {
-    /* mermaid: function (tokens:FenceToken[], idx:number, options:Object, env:any, instance:Remarkable) {
+    / mermaid: function (tokens:FenceToken[], idx:number, options:Object, env:any, instance:Remarkable) {
         let token = tokens[idx];
         let flowStr = token.content;
         try {
@@ -95,7 +95,7 @@ renderer.renderer.rules.fence_custom = {
             token.params = '';
             return instance.rules.fence(tokens, idx, options, env, instance);
         }
-    } */
+    } /
 };
 renderer.renderer.rules.list_item_open = function (tokens:ListItemToken[], idx:number) {
     for (let i = idx + 1; i < idx + 3; i++) {
@@ -119,6 +119,6 @@ renderer.renderer.rules.heading_open = function (tokens, idx) {
 // @ts-ignore
 renderer.renderer.rules.heading_close = function (tokens, idx) {
     return '</a></h' + tokens[idx].hLevel + '>';
-};
+}; */
 
-export default renderer;
+// export default renderer;

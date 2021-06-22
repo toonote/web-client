@@ -1,6 +1,6 @@
 import { Store } from '../interfaces/Store';
 import { StoreLocal } from '@toonote/store-local';
-import { WebClientView } from './view/main';
+import { WebClientView } from './view/WebClientView';
 interface IStore{
     new(options): Store
 }

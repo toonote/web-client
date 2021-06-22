@@ -3,54 +3,54 @@
     <transition name="slide">
         <sidebar class="sidebar"></sidebar>
     </transition>
-    <transition name="slide-flex">
+    <!-- <transition name="slide-flex">
         <editor class="editor" v-model="editor.data.content"></editor>
     </transition>
     <transition name="slide-flex">
         <preview class="preview" :content="editor.data.content"></preview>
-    </transition>
-    <login v-if="!userInfo.data.isLogin"></login>
+    </transition> -->
+    <!-- <login v-if="!userInfo.data.isLogin"></login> -->
 </main>
 </template>
 
 <script type="ts">
-import { createComponent, reactive, watch } from '@vue/composition-api';
+import { reactive, watch } from 'vue';
 
-import { getData } from '../dataInjector';
+// import { getData } from '../dataInjector';
 
 import Sidebar from './Sidebar.vue';
 // import Editor from '@toonote/md-editor';
 import Preview from './Preview.vue';
-import Login from './Login.vue';
+// import Login from './Login.vue';
 
-export default createComponent({
+export default {
     components: {
         Sidebar,
-        Editor: () => import('@toonote/md-editor'),
+        // Editor: () => import('@toonote/md-editor'),
         Preview,
-        Login,
+        // Login,
     },
     setup(props, ctx){
-        const editor = reactive(getData('editor'));
-        const userInfo = reactive(getData('userInfo'));
+        // const editor = reactive(getData('editor'));
+        // const userInfo = reactive(getData('userInfo'));
 
-        let lastContent = editor.data.content;
+        // let lastContent = editor.data.content;
 
-        watch(() => {
-            if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
-                ctx.root.$webClient.$emit('editor.change', {
-                    content: editor.data.content
-                });
-                lastContent = editor.data.content;
-            }
-        });
+        // watch(() => {
+        //     if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
+        //         ctx.root.$webClient.$emit('editor.change', {
+        //             content: editor.data.content
+        //         });
+        //         lastContent = editor.data.content;
+        //     }
+        // });
 
         return {
-            editor,
-            userInfo,
+            // editor,
+            // userInfo,
         };
     }
-});
+};
 </script>
 
 <style>

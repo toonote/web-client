@@ -19,12 +19,12 @@
 </section>
 </template>
 <script lang="ts">
-import { createComponent, computed, reactive, ref } from '@vue/composition-api';
-import axios from 'axios';
+import { computed, reactive, ref } from 'vue';
+// import axios from 'axios';
 
 declare var process:any
 
-export default createComponent({
+export default {
     setup(props: any, ctx: any){
 
         const showLoginImage = ref(false);
@@ -58,7 +58,7 @@ export default createComponent({
 
             const isLogin = await validateLogin();
             if(isLogin) return;
-            
+
             // 显示登录图片
             showLoginImage.value = true;
 
@@ -97,7 +97,7 @@ export default createComponent({
             showLoginImage,
         };
     }
-});
+};
 
 </script>
 <style scoped>

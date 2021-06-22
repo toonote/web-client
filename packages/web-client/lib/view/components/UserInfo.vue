@@ -1,6 +1,6 @@
 <template>
 <section class="userInfo">
-    <img v-if="data.data.avatarUrl" class="avatar" :src="data.data.avatarUrl" />
+    <!-- <img v-if="data.data.avatarUrl" class="avatar" :src="data.data.avatarUrl" />
 	<img v-else class="avatar" src="../images/avatar.png" />
 	<div class="userName">
 		<span v-if="data.data.name">{{data.data.name}}</span>
@@ -8,15 +8,14 @@
 	</div>
 	<div class="labelWrapper">
 		<div v-for="label in data.data.labels" :key="label" class="label">{{label}}</div>
-	</div>
+	</div> -->
 </section>
 </template>
 <script>
 import { getData } from '../dataInjector';
-import { createComponent } from '@vue/composition-api';
-export default createComponent({
+export default {
     setup(props, ctx){
-        const userInfo = getData('userInfo');
+        /* const userInfo = getData('userInfo');
 
         const doLogin = function(){
 			ctx.root.$webClient.$emit('user.login', {});
@@ -25,9 +24,9 @@ export default createComponent({
         return {
             data: userInfo,
             doLogin,
-        };
+        }; */
     }
-});
+};
 </script>
 <style scoped>
 .userInfo{

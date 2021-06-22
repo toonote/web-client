@@ -4,15 +4,15 @@
 </section>
 </template>
 <script lang="ts">
-import { createComponent, computed } from '@vue/composition-api';
-import renderer from '../utils/renderer';
+import { computed } from 'vue';
+// import renderer from '../utils/renderer';
 
-export default createComponent({
+export default {
     props: ['content'],
     setup(props, context){
         const html = computed(() => {
             // @ts-ignore
-            return renderer.render(props.content);
+            // return renderer.render(props.content);
         });
 
         const handleContent = (e:Event) => {
@@ -32,9 +32,11 @@ export default createComponent({
             handleContent,
         };
     }
-});
+};
 </script>
 <style scoped>
+@import "../styles/markdown.css";
+
 .preview{
 	font-family: "PingFang SC";
 	height:100%;
@@ -44,5 +46,4 @@ export default createComponent({
 	line-height: 28px;
 	background:#fff;
 }
-@import "../styles/markdown.css";
 </style>
