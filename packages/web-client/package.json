@@ -1,8 +1,11 @@
 {
-    "name": "@toonote/web-client",
-    "version": "1.0.0-alpha1",
-    "module": "index.ts",
-    "devDependencies": {
-        "vue": "^3.1.1"
-    }
+  "name": "@toonote/web-client",
+  "version": "1.0.0-alpha1",
+  "module": "index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "vue": "^3.1.1"
+  }
 }

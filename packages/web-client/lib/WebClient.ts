@@ -33,6 +33,11 @@ export class WebClient {
 
         this.view = new WebClientView();
         this.view.mount(this.container);
+
+        this.view.data.user = {
+          name: 'TooBug',
+          avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
+        };
     }
 }
 

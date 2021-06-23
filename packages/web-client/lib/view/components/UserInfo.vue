@@ -1,39 +1,42 @@
 <template>
   <section class="userInfo">
-    <!-- <img v-if="data.data.avatarUrl" class="avatar" :src="data.data.avatarUrl" />
-	<img v-else class="avatar" src="../images/avatar.png" />
-	<div class="userName">
-		<span v-if="data.data.name">{{data.data.name}}</span>
-		<a v-else @click="doLogin" href="#">点击登录</a>
-	</div>
-	<div class="labelWrapper">
-		<div v-for="label in data.data.labels" :key="label" class="label">{{label}}</div>
-	</div> -->
+    <img v-if="user && user.avatarUrl" class="avatar" :src="user.avatarUrl" />
+	  <img v-else class="avatar" src="../images/avatar.png" />
+    <div class="userName">
+      <span v-if="user && user.name">{{user.name}}</span>
+      <a v-else @click="doLogin" href="#">点击登录</a>
+    </div>
+    <!-- <div class="labelWrapper">
+      <div v-for="label in user.labels" :key="label" class="label">{{label}}</div>
+    </div> -->
   </section>
 </template>
 <script>
-import { getData } from '../dataInjector';
+import { getData } from '../viewData';
 export default {
-    setup(props, ctx){
-        /* const userInfo = getData('userInfo');
+  setup(props, ctx){
+    const user = getData('user');
+    return {
+      user,
+    };
+      /*
+      const doLogin = function(){
+    ctx.root.$webClient.$emit('user.login', {});
+      };
 
-        const doLogin = function(){
-			ctx.root.$webClient.$emit('user.login', {});
-        };
-
-        return {
-            data: userInfo,
-            doLogin,
-        }; */
-    }
+      return {
+          data: userInfo,
+          doLogin,
+      }; */
+  }
 };
 </script>
 <style scoped>
 .userInfo{
 	padding:10px;
 	margin:0 auto;
-    border-bottom: 1px solid #e0e0e0;
-    position: relative;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
 }
 .userInfo .avatar{
 	width:40px;
