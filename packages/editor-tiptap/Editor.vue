@@ -10,7 +10,6 @@ import StarterKit from '@tiptap/starter-kit';
 export default {
   props: ['modelValue'],
   setup(props, ctx) {
-    console.log(props, props.modelValue);
     const editorElm = ref(null);
 
     onMounted(() => {
@@ -20,7 +19,6 @@ export default {
         content: props.modelValue,
         onUpdate: ({ editor }) => {
           ctx.emit('update:modelValue', editor.getHTML());
-          console.log('change', ctx);
         },
       });
     });
@@ -33,5 +31,10 @@ export default {
 </script>
 
 <style>
-
+.ProseMirror{
+  height: 100%;
+}
+.ProseMirror-focused{
+  outline: 0 none;
+}
 </style>

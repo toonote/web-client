@@ -6,12 +6,12 @@
     <transition name="slide-flex">
       <editor v-if="editor[0]" class="editor" v-model="editor[0].content"></editor>
     </transition>
-    <span v-if="editor[0]">{{editor[0].content}}</span>
     <!--
     <transition name="slide-flex">
         <preview class="preview" :content="editor.data.content"></preview>
     </transition> -->
     <!-- <login v-if="!userInfo.data.isLogin"></login> -->
+    <!-- <span v-if="editor[0]">{{editor[0].content}}</span> -->
   </main>
 </template>
 
@@ -60,7 +60,7 @@ export default {
 	padding:0;
 	margin:0;
 }
-html,body,#wrapper{
+html,body,#container{
 	height: 100%;
 }
 body{
