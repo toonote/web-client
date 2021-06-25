@@ -3,9 +3,11 @@
     <transition name="slide">
       <sidebar class="sidebar" />
     </transition>
-    <!-- <transition name="slide-flex">
-        <editor class="editor" v-model="editor.data.content"></editor>
+    <transition name="slide-flex">
+      <editor v-if="editor[0]" class="editor" v-model="editor[0].content"></editor>
     </transition>
+    <span v-if="editor[0]">{{editor[0].content}}</span>
+    <!--
     <transition name="slide-flex">
         <preview class="preview" :content="editor.data.content"></preview>
     </transition> -->
@@ -14,23 +16,23 @@
 </template>
 
 <script type="ts">
-import { reactive, watch } from 'vue';
+// import { reactive, watch } from 'vue';
 
-// import { getData } from '../dataInjector';
-
+import { getData } from '../viewData';
 import Sidebar from './Sidebar.vue';
-// import Editor from '@toonote/md-editor';
+import Editor from '@toonote/editor-tiptap';
 // import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
 export default {
     components: {
         Sidebar,
-        // Editor: () => import('@toonote/md-editor'),
+        Editor,
         // Preview,
         // Login,
     },
     setup(props, ctx){
+      const editor = getData('editor');
         // const editor = reactive(getData('editor'));
         // const userInfo = reactive(getData('userInfo'));
 
@@ -45,10 +47,10 @@ export default {
         //     }
         // });
 
-        return {
-            // editor,
-            // userInfo,
-        };
+      return {
+        editor,
+          // userInfo,
+      };
     }
 };
 </script>

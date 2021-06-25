@@ -1,0 +1,9 @@
+{
+  "name": "@toonote/editor-tiptap",
+  "version": "1.0.0",
+  "module": "main.ts",
+  "devDependencies": {
+    "@tiptap/core": "^2.0.0-beta.85",
+    "@tiptap/starter-kit": "^2.0.0-beta.81"
+  }
+}

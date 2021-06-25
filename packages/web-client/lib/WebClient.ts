@@ -2,43 +2,49 @@ import { Store } from '../interfaces/Store';
 import { StoreLocal } from '@toonote/store-local';
 import { WebClientView } from './view/WebClientView';
 interface IStore{
-    new(options): Store
+  new(options): Store
 }
 
 export interface WebClientOptions {
-    container: string|HTMLElement,
-    storage?: IStore|string,
+  container: string|HTMLElement,
+  storage?: IStore|string,
 }
 
 export class WebClient {
-    private container:HTMLElement
-    private storageClass: IStore
-    private view:WebClientView
-    constructor(options: WebClientOptions){
-        if(typeof options.container === 'string'){
-            this.container = document.querySelector(options.container);
-        }else{
-            this.container = options.container;
-        }
-
-        if(options.storage){
-            if(typeof options.storage === 'string'){
-                this.storageClass = require(options.storage);
-            }else{
-                this.storageClass = options.storage;
-            }
-        }else{
-            this.storageClass = StoreLocal;
-        }
-
-        this.view = new WebClientView();
-        this.view.mount(this.container);
-
-        this.view.data.user = {
-          name: 'TooBug',
-          avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
-        };
+  private container:HTMLElement
+  private storageClass: IStore
+  private view:WebClientView
+  constructor(options: WebClientOptions){
+    if(typeof options.container === 'string'){
+        this.container = document.querySelector(options.container);
+    }else{
+        this.container = options.container;
     }
+
+    if(options.storage){
+        if(typeof options.storage === 'string'){
+            this.storageClass = require(options.storage);
+        }else{
+            this.storageClass = options.storage;
+        }
+    }else{
+        this.storageClass = StoreLocal;
+    }
+
+    this.view = new WebClientView();
+    this.view.mount(this.container);
+
+    this._test();
+  }
+  _test(){
+    this.view.data.user = {
+      name: 'TooBug',
+      avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
+    };
+    this.view.data.editor[0] = {
+      content: 'test',
+    };
+  }
 }
 
 
