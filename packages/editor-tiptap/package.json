@@ -4,6 +4,7 @@
   "module": "main.ts",
   "devDependencies": {
     "@tiptap/core": "^2.0.0-beta.85",
-    "@tiptap/starter-kit": "^2.0.0-beta.81"
+    "@tiptap/starter-kit": "^2.0.0-beta.81",
+    "sass": "^1.35.1"
   }
 }

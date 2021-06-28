@@ -30,11 +30,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import './styles/content.scss';
+
 .ProseMirror{
   height: 100%;
 }
 .ProseMirror-focused{
   outline: 0 none;
+}
+.ProseMirror{
+  @include content;
 }
 </style>

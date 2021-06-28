@@ -39,7 +39,7 @@ export default {
 };
 </script>
 <style scoped>
-@import "../styles/markdown.css";
+/* @import "../styles/markdown.css"; */
 
 .preview{
 	font-family: "PingFang SC";

@@ -1,0 +1,127 @@
+$themeColor: #718C00;
+$textFontFamily: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+$codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monospace;
+
+@mixin content {
+  font-family: $textFontFamily;
+  line-height: 28px;
+  font-size: 14px;
+  color:#4D4D4C;
+  letter-spacing: 1px;
+  padding:0 20px;
+  /*标题*/
+  h1, h2, h3,
+  h4, h5, h6{
+    margin:16px 0;
+    color: $themeColor;
+    font-weight: normal;
+  }
+  /*表格*/
+  table{
+    margin-bottom: 28px;
+    margin-left:auto;
+    margin-right:auto;
+    /*width:80%;*/
+    width:100%;
+    border:1px solid #E0E0E0;
+    border-collapse: collapse;
+  }
+  table th,
+  table td{
+    padding: 3px;
+    border:1px solid #E0E0E0;
+  }
+  table th{
+    background:#F0F0F0;
+  }
+
+  /*段落*/
+  p{
+    margin-bottom: 28px;
+    /*text-indent: 34px;*/
+  }
+
+  /*列表*/
+  ul, ol{
+    margin-bottom: 28px;
+    /*padding-left:34px;*/
+    /*list-style-position: inside;*/
+    margin-left: 2em;
+    list-style-position: outside;
+  }
+  li > p{
+    text-indent: 0;
+    margin-bottom: 0;
+  }
+  ul ul,
+  ul ol,
+  ol ol,
+  ol ul{
+    padding-left: 34px;
+    margin-bottom: 0;
+  }
+  /*todo*/
+  li.todo{
+    list-style: none;
+    margin-left: -1.4em;
+  }
+  li.todo.done{
+    color:#aaa;
+  }
+  li.todo.done > p::first-letter{
+    color:green;
+  }
+  li.todo.doing > p::first-letter{
+    /*color:#aaa;*/
+  }
+  /* li.todo.doing::before{
+    content:'☐';
+  }
+  li.todo.done::before{
+    content:'✔';
+  }
+  li.todo p{
+    text-indent:-1.5em;
+  }*/
+
+  /*代码*/
+  code{
+    background:#F0F0F0;
+    padding:0 5px;;
+    font-family: $codeFontFamily;
+  }
+  pre code{
+    /*margin-left:34px;*/
+    margin-bottom: 28px;
+    display: block;
+    background:#fff;
+    border:1px solid #E0E0E0;
+    overflow-x: scroll;
+    font-size: 13px;
+  }
+  /*引用*/
+  blockquote{
+    /*margin-left:34px;*/
+    font-size:13px;
+    margin-bottom: 28px;
+    padding:0 10px;
+    background:#F0F0F0;
+    border-left:3px solid #E0E0E0;
+  }
+  blockquote p{
+    text-indent: 0;
+    margin-bottom: 14px;
+  }
+  /*图片*/
+  img{
+    max-width: 100%;
+    border: 1px solid #E0E0E0;
+    padding: 1px;
+  }
+
+  /*链接*/
+  a{
+    color: $themeColor;
+    text-decoration: none;
+  }
+}
