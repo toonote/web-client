@@ -1,14 +1,20 @@
 $themeColor: #718C00;
+$textColor: #4D4D4D;
 $textFontFamily: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 $codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monospace;
+$textFontSize: 14px;
+$codeFontSize: 12px;
+$lineHeight: 24px;
+$paraMargin: 18px;
+$quotePadding: 12px 10px;
 
 @mixin content {
   font-family: $textFontFamily;
-  line-height: 28px;
-  font-size: 14px;
-  color:#4D4D4C;
-  letter-spacing: 1px;
-  padding:0 20px;
+  line-height: $lineHeight;
+  font-size: $textFontSize;
+  color: $textColor;
+  // letter-spacing: 1px;
+  // padding:0 20px;
   /*标题*/
   h1, h2, h3,
   h4, h5, h6{
@@ -18,7 +24,7 @@ $codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monosp
   }
   /*表格*/
   table{
-    margin-bottom: 28px;
+    margin-bottom: $paraMargin;
     margin-left:auto;
     margin-right:auto;
     /*width:80%;*/
@@ -37,13 +43,13 @@ $codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monosp
 
   /*段落*/
   p{
-    margin-bottom: 28px;
+    margin-bottom: $paraMargin;
     /*text-indent: 34px;*/
   }
 
   /*列表*/
   ul, ol{
-    margin-bottom: 28px;
+    margin-bottom: $paraMargin;
     /*padding-left:34px;*/
     /*list-style-position: inside;*/
     margin-left: 2em;
@@ -92,25 +98,25 @@ $codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monosp
   }
   pre code{
     /*margin-left:34px;*/
-    margin-bottom: 28px;
+    margin-bottom: $paraMargin;
     display: block;
     background:#fff;
     border:1px solid #E0E0E0;
     overflow-x: scroll;
-    font-size: 13px;
+    font-size: $codeFontSize;
   }
   /*引用*/
   blockquote{
     /*margin-left:34px;*/
-    font-size:13px;
-    margin-bottom: 28px;
-    padding:0 10px;
+    font-size: $textFontSize;
+    margin-bottom: $paraMargin;
+    padding: $quotePadding;
     background:#F0F0F0;
     border-left:3px solid #E0E0E0;
   }
   blockquote p{
     text-indent: 0;
-    margin-bottom: 14px;
+    margin-bottom: 0;
   }
   /*图片*/
   img{

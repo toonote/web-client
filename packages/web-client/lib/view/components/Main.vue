@@ -25,33 +25,33 @@ import Editor from '@toonote/editor-tiptap';
 // import Login from './Login.vue';
 
 export default {
-    components: {
-        Sidebar,
-        Editor,
-        // Preview,
-        // Login,
-    },
-    setup(props, ctx){
-      const editor = getData('editor');
-        // const editor = reactive(getData('editor'));
-        // const userInfo = reactive(getData('userInfo'));
+  components: {
+    Sidebar,
+    Editor,
+    // Preview,
+    // Login,
+  },
+  setup(props, ctx){
+    const editor = getData('editor');
+      // const editor = reactive(getData('editor'));
+      // const userInfo = reactive(getData('userInfo'));
 
-        // let lastContent = editor.data.content;
+      // let lastContent = editor.data.content;
 
-        // watch(() => {
-        //     if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
-        //         ctx.root.$webClient.$emit('editor.change', {
-        //             content: editor.data.content
-        //         });
-        //         lastContent = editor.data.content;
-        //     }
-        // });
+      // watch(() => {
+      //     if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
+      //         ctx.root.$webClient.$emit('editor.change', {
+      //             content: editor.data.content
+      //         });
+      //         lastContent = editor.data.content;
+      //     }
+      // });
 
-      return {
-        editor,
-          // userInfo,
-      };
-    }
+    return {
+      editor,
+        // userInfo,
+    };
+  }
 };
 </script>
 
@@ -93,11 +93,14 @@ body{
 	height:calc(100% - 24px);
 } */
 .main .sidebar{
-    width: 250px;
+  width: 250px;
 }
 .main .editor,
 .main .preview{
-    flex: 1;
+  flex: 1;
+}
+.main .editor{
+  padding: 0 20px;
 }
 
 
