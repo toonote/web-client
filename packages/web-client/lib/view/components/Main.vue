@@ -1,18 +1,18 @@
 <template>
-  <main class="main">
-    <transition name="slide">
+  <div class="layout">
+    <div class="row top">
+      <toolbar class="toolbar"/>
+      <user-info class="userInfo"/>
+    </div>
+    <div class="row main">
       <sidebar class="sidebar" />
-    </transition>
-    <transition name="slide-flex">
       <editor v-if="editor[0]" class="editor" v-model="editor[0].content"></editor>
-    </transition>
+    </div>
     <!--
-    <transition name="slide-flex">
-        <preview class="preview" :content="editor.data.content"></preview>
-    </transition> -->
+        <preview class="preview" :content="editor.data.content"></preview>-->
     <!-- <login v-if="!userInfo.data.isLogin"></login> -->
     <!-- <span v-if="editor[0]">{{editor[0].content}}</span> -->
-  </main>
+  </div>
 </template>
 
 <script type="ts">
@@ -20,12 +20,16 @@
 
 import { getData } from '../viewData';
 import Sidebar from './Sidebar.vue';
+import Toolbar from './Toolbar.vue';
 import Editor from '@toonote/editor-tiptap';
+import UserInfo from './UserInfo.vue';
 // import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
 export default {
   components: {
+    Toolbar,
+    UserInfo,
     Sidebar,
     Editor,
     // Preview,
@@ -66,9 +70,10 @@ html,body,#container{
 body{
 	font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 }
-
+</style>
+<style lang="scss">
 /*动画*/
-.slide-enter-active, .slide-leave-active {
+/* .slide-enter-active, .slide-leave-active {
 	transition: width .5s;
 }
 .slide-enter, .slide-leave-active {
@@ -80,11 +85,25 @@ body{
 .slide-flex-enter, .slide-flex-leave-active {
 	flex: 0!important;
 }
-
-.main{
-	display: flex;
-	height:100%;
-	/* background:url('../images/bg.jpg') center 40% no-repeat; */
+ */
+.layout{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* background:url('../images/bg.jpg') center 40% no-repeat; */
+  .row {
+    display: flex;
+  }
+  .top {
+    margin: 20px 30px;
+  }
+  .main {
+    flex: 1;
+    display: flex;
+  }
+  .toolbar{
+    flex: 1,
+  }
 }
 .main.withSidebar{
 	/* background-position: 60% 40%; */

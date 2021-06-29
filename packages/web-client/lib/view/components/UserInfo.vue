@@ -33,9 +33,8 @@ export default {
 </script>
 <style scoped>
 .userInfo{
-	padding:10px;
 	margin:0 auto;
-  border-bottom: 1px solid #e0e0e0;
+  /* border-bottom: 1px solid #e0e0e0; */
   position: relative;
 }
 .userInfo .avatar{

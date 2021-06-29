@@ -1,0 +1,29 @@
+$background: #fff;
+$themeColor: #54A4FF;
+$shadowColor: rgba(84,164,255,.3);
+
+@mixin buttonIcon{
+  i {
+    display: block;
+    // text-indent: 100%;
+    text-indent: 13px;
+    font-size: 20px;
+    line-height: 48px;
+    font-style: normal;
+    color: $themeColor;
+    letter-spacing: 3em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+@mixin button {
+  background: $background;
+  border-radius: 10px;
+  cursor: pointer;
+  @include buttonIcon;
+}
+
+@mixin buttonShadow{
+  box-shadow: 0 0 10px $shadowColor;
+}
