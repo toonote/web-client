@@ -1,5 +1,38 @@
 <template>
-  <section class="noteTree">
+  <section class="notebookTree" v-if="notebook">
+		<!-- <h2>{{notebook.title}}</h2> -->
+		<ul>
+			<li
+				v-for="category in notebook.categories"
+        :key="category.id"
+				@click="switchFold(category)"
+			>
+        <svg-icon className="icon" icon="notebook/folder" />
+        <span>{{category.title}}</span>
+				<transition-group
+					name="note-list"
+					tag="ul"
+					droppable="true"
+					v-show="!foldMap[category.id]"
+					v-on:drop="drop"
+					>
+					<li
+						draggable="true"
+						:key="note.id"
+						:class="{active:note.id === currentNoteId}"
+						v-for="note in category.notes"
+						@contextmenu="showContextMenu('note', note.id)"
+						@click.stop="switchActiveNote(note.id)"
+						@dragstart="dragStart($event, note.id)"
+						@dragover.prevent="dragOver($event, note.id)"
+					>
+            <svg-icon className="icon" icon="notebook/note" />
+            <span>{{note.title}}</span>
+          </li>
+				</transition-group>
+			</li>
+		</ul>
+  </section>
     <!-- <section class="searchWrapper">
 		<input type="search" v-model.trim="keyword" placeholder="搜索..." />
 	</section>
@@ -22,57 +55,35 @@
 			</li>
 		</ul>
 	</section> -->
-    <!-- <section class="wrapper" v-contextmenu:contextMenu>
-		<h2>{{notebook.data.title}}</h2>
-		<ul>
-			<li
-				class="icon folder"
-				v-for="(notes,category) in notebook.data.categories"
-                :key="category"
-				@click="switchFold(category)"
-			>{{category}}
-				<transition-group
-					name="note-list"
-					tag="ul"
-					droppable="true"
-					v-show="!foldMap[category]"
-					v-on:drop="drop"
-					>
-					<li
-						draggable="true"
-						class="icon note"
-						:key="note.id"
-						:class="{active:note.id === state.data.currentNoteId}"
-						v-for="note in notes"
-						@contextmenu="showContextMenu('note', note.id)"
-						@click.stop="switchActiveNote(note.id)"
-						@dragstart="dragStart($event, note.id)"
-						@dragover.prevent="dragOver($event, note.id)"
-					>{{note.title}}</li>
-				</transition-group>
-			</li>
-		</ul>
-	</section>
-	<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
+
+	<!--<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
 		<v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
 		<v-contextmenu-item>重命名</v-contextmenu-item>
 		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
 	</v-contextmenu> -->
-  </section>
 </template>
 <script>
 import { reactive, ref } from 'vue';
-// import { getData } from '../dataInjector';
+import { getData } from '../viewData';
 
 export default {
-    setup(props, ctx){
+  setup(props, ctx){
+    const notebook = getData('notebook');
+    const foldMap = reactive({});
+    const currentNoteId = ref('n2');
+
+    return {
+      notebook,
+      foldMap,
+      currentNoteId,
+    };
 		/* const state = reactive(getData('state'));
 		const notebook = reactive(getData('notebook'));
 		const localState = reactive({
 			currentContextMenuNoteId: '',
 		});
 
-		const foldMap = ref({});
+
 
         const switchFold = function(category){
 			let value;
@@ -145,27 +156,38 @@ export default {
     }
 };
 </script>
-<style scoped>
-.wrapper{
-	line-height: 24px;
-	padding-top: 10px;
+<style scoped lang="scss">
+@import '../styles/ui.scss';
+@import '../styles/variables.scss';
+
+.notebookTree{
+  font-size: 14px;
+	line-height: 30px;
+  color: $textColor;
 }
-.wrapper h2,
+/* .wrapper h2,
 .wrapper .notFound{
 	font-size:14px;
 	padding-left:15px;
 	font-weight: normal;
-}
-.wrapper ul{
+} */
+ul{
 	list-style: none;
-}
-.wrapper li{
-	font-size:14px;
-	text-indent: 25px;
-	/*padding-left:25px;*/
-	cursor:default;
-	white-space: nowrap;
-	overflow: hidden;
+  li{
+    cursor:default;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    span {
+      padding-left: 5px;
+    }
+    li {
+      padding-left: 20px;
+      &.active {
+        color: $themeColor;
+      }
+    }
+  }
 }
 .wrapper li li{
 	text-indent: 44px;
@@ -201,5 +223,9 @@ export default {
 .contextMenu ul li:hover,
 .contextMenu ul li.active{
 	background: #CECECE;
+}
+
+.icon {
+  font-size: 12px;
 }
 </style>

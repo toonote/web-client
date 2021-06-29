@@ -44,6 +44,34 @@ export class WebClient {
     this.view.data.editor[0] = {
       content: 'test',
     };
+    this.view.data.notebook = {
+      id: 'test',
+      title: '笔记本',
+      categories: [
+        {
+          id: 'c1',
+          title: '分类1',
+          notes: [{
+            id: 'n1',
+            title: '标题1',
+          }, {
+            id: 'n2',
+            title: '标题2',
+          }],
+        },
+        {
+          id: 'c2',
+          title: '分类2',
+          notes: [{
+            id: 'n3',
+            title: '标题3',
+          }, {
+            id: 'n4',
+            title: '标题4',
+          }],
+        }
+      ],
+    };
   }
 }
 

@@ -2,10 +2,10 @@
   <section class="userInfo">
     <img v-if="user && user.avatarUrl" class="avatar" :src="user.avatarUrl" />
 	  <img v-else class="avatar" src="../images/avatar.png" />
-    <div class="userName">
+    <!-- <div class="userName">
       <span v-if="user && user.name">{{user.name}}</span>
       <a v-else @click="doLogin" href="#">点击登录</a>
-    </div>
+    </div> -->
     <!-- <div class="labelWrapper">
       <div v-for="label in user.labels" :key="label" class="label">{{label}}</div>
     </div> -->
@@ -31,19 +31,20 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+@import '../styles/ui.scss';
+@import '../styles/variables.scss';
+
 .userInfo{
 	margin:0 auto;
-  /* border-bottom: 1px solid #e0e0e0; */
-  position: relative;
 }
 .userInfo .avatar{
-	width:40px;
-	height:40px;
-	border-radius: 40px;
-	float:left;
+	width: $buttonSize;
+	height: $buttonSize;
+	border-radius: 10px;
+	float: left;
 }
-.userInfo .userName{
+/* .userInfo .userName{
 	margin-left:50px;
 	height:40px;
 	line-height: 40px;
@@ -65,5 +66,5 @@ export default {
     background: #718c00;
     display: inline-block;
     color: white;
-}
+} */
 </style>

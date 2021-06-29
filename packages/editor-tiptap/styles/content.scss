@@ -1,11 +1,12 @@
-$themeColor: #718C00;
-$textColor: #4D4D4D;
+// $themeColor: #718C00;
+$themeColor: #666;
+$textColor: #666;
 $textFontFamily: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 $codeFontFamily: source-code-pro, Monaco, Menlo, "Ubuntu Mono", Consolas, monospace;
-$textFontSize: 14px;
+$textFontSize: 16px;
 $codeFontSize: 12px;
-$lineHeight: 24px;
-$paraMargin: 18px;
+$lineHeight: 30px;
+$paraMargin: 30px;
 $quotePadding: 12px 10px;
 
 @mixin content {
@@ -18,9 +19,9 @@ $quotePadding: 12px 10px;
   /*标题*/
   h1, h2, h3,
   h4, h5, h6{
-    margin:16px 0;
+    margin-bottom: $paraMargin;
     color: $themeColor;
-    font-weight: normal;
+    font-weight: bold;
   }
   /*表格*/
   table{

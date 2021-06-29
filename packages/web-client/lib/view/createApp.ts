@@ -2,12 +2,14 @@
 
 import { createApp, h, reactive } from 'vue';
 import Main from './components/Main.vue';
+import 'vite-plugin-svg-icons/register';
+import SvgIcon from './components/SvgIcon.vue';
 // import ContentMenu from 'v-contextmenu';
 
 // Vue.use(ContentMenu);
 
 export function createVueApp(){
-  return createApp({
+  const app = createApp({
     setup(){
       return reactive({});
     },
@@ -15,4 +17,8 @@ export function createVueApp(){
       return h(Main);
     }
   });
+
+  app.component('SvgIcon', SvgIcon);
+
+  return app;
 }

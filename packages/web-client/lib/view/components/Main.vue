@@ -5,7 +5,7 @@
       <user-info class="userInfo"/>
     </div>
     <div class="row main">
-      <sidebar class="sidebar" />
+      <notebook-tree class="notebookTree" />
       <editor v-if="editor[0]" class="editor" v-model="editor[0].content"></editor>
     </div>
     <!--
@@ -19,7 +19,7 @@
 // import { reactive, watch } from 'vue';
 
 import { getData } from '../viewData';
-import Sidebar from './Sidebar.vue';
+import NotebookTree from './NotebookTree.vue';
 import Toolbar from './Toolbar.vue';
 import Editor from '@toonote/editor-tiptap';
 import UserInfo from './UserInfo.vue';
@@ -30,7 +30,7 @@ export default {
   components: {
     Toolbar,
     UserInfo,
-    Sidebar,
+    NotebookTree,
     Editor,
     // Preview,
     // Login,
@@ -102,35 +102,16 @@ body{
     display: flex;
   }
   .toolbar{
-    flex: 1,
+    flex: 1;
   }
-}
-.main.withSidebar{
-	/* background-position: 60% 40%; */
-}
-/* .main.withMenubar{
-	height:calc(100% - 24px);
-} */
-.main .sidebar{
-  width: 250px;
-}
-.main .editor,
-.main .preview{
-  flex: 1;
-}
-.main .editor{
-  padding: 0 20px;
-}
-
-
-/* 全局图标定义 */
-.icon::before{
-	content:' ';
-	display: inline-block;
-	width:16px;
-	height:16px;
-	vertical-align: sub;
-	background-size:16px 16px;
-	background-repeat:no-repeat;
+  .notebookTree{
+    width: 230px;
+    margin: 0 30px;
+  }
+  .editor{
+    flex: 1;
+    margin-top: 10px;
+    margin-right: 30px;
+  }
 }
 </style>
