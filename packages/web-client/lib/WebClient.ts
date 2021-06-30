@@ -34,7 +34,9 @@ export class WebClient {
     this.view = new WebClientView();
     this.view.mount(this.container);
 
-    this._test();
+    if (import.meta.env.DEV){
+      this._test();
+    }
   }
   _test(){
     this.view.data.user = {

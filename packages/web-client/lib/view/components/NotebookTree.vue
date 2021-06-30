@@ -5,7 +5,7 @@
 			<li
 				v-for="category in notebook.categories"
         :key="category.id"
-				@click="switchFold(category)"
+				@click="switchFold(category.id)"
 			>
         <svg-icon className="icon" icon="notebook/folder" />
         <span>{{category.title}}</span>
@@ -22,7 +22,7 @@
 						:class="{active:note.id === currentNoteId}"
 						v-for="note in category.notes"
 						@contextmenu="showContextMenu('note', note.id)"
-						@click.stop="switchActiveNote(note.id)"
+						@click.stop="switchCurrentNote(note.id)"
 						@dragstart="dragStart($event, note.id)"
 						@dragover.prevent="dragOver($event, note.id)"
 					>
@@ -48,7 +48,7 @@
 						class="icon note"
 						v-bind:class="{active:isActive(note.id)}"
 						v-for="note in notes"
-						v-on:click="switchActiveNote(note.id)"
+						v-on:click="switchCurrentNote(note.id)"
 						v-on:contextmenu="showContextMenu(note.id)"
 					>{{note.title}}</li>
 				</ul>
@@ -66,94 +66,49 @@
 import { reactive, ref } from 'vue';
 import { getData } from '../viewData';
 
+const useFold = () => {
+  const foldMap = reactive({});
+  const switchFold = function(categoryId){
+    let value;
+    if(!foldMap[categoryId]){
+      value = true;
+    }else{
+      value = false;
+    }
+    foldMap[categoryId] = value;
+    console.log(foldMap);
+  };
+  return { foldMap, switchFold };
+};
+
+const useCurrentNote = () => {
+  const currentNoteId = ref('n2');
+
+  const switchCurrentNote = function(id){
+    currentNoteId.value = id;
+    /* ctx.root.$webClient.$emit('note.switchActive', {
+      id
+    }); */
+  }
+
+  return { currentNoteId, switchCurrentNote };
+};
+
 export default {
   setup(props, ctx){
     const notebook = getData('notebook');
-    const foldMap = reactive({});
-    const currentNoteId = ref('n2');
+
+    const { currentNoteId, switchCurrentNote } = useCurrentNote();
+    const { foldMap, switchFold } = useFold();
 
     return {
       notebook,
       foldMap,
       currentNoteId,
+      switchCurrentNote,
+      switchFold,
     };
-		/* const state = reactive(getData('state'));
-		const notebook = reactive(getData('notebook'));
-		const localState = reactive({
-			currentContextMenuNoteId: '',
-		});
-
-
-
-        const switchFold = function(category){
-			let value;
-			if(!foldMap.value[category]){
-				value = true;
-			}else{
-				value = false;
-			}
-			foldMap.value = {
-				...foldMap.value,
-				[category]: value
-			};
-        }; */
-
-        /* const isFold = function(category){
-			console.log('isFold');
-			return foldMap[category];
-        }; */
-        /* const isActive = function(noteId){
-			// console.log(noteId, state.currentContextMenuNoteId);
-            return noteId === state.currentContextMenuNoteId;
-        }; */
-
-		/* const showContextMenu = function(type, id){
-			localState.currentContextMenuNoteId = id;
-		};
-
-		const hideContextMenu = function(){
-			localState.currentContextMenuNoteId = '';
-		}
-
-		const drop = function(){};
-
-		const newNote = function(from){
-			ctx.root.$webClient.$emit('note.new', {
-				from,
-				context: {
-					type: 'note',
-					id: state.currentContextMenuNoteId,
-				}
-			});
-		}
-
-		const deleteNote = function(){
-			ctx.root.$webClient.$emit('note.delete', {
-				id: localState.currentContextMenuNoteId,
-			});
-		}
-
-		const switchActiveNote = function(id){
-			state.data.currentNoteId = id;
-			ctx.root.$webClient.$emit('note.switchActive', {
-				id
-			});
-		}
-
-        return {
-			state,
-			localState,
-            notebook,
-            foldMap,
-            switchFold,
-			showContextMenu,
-			hideContextMenu,
-			drop,
-			newNote,
-			deleteNote,
-			switchActiveNote,
-        }; */
-    }
+  }
 };
 </script>
 <style scoped lang="scss">
