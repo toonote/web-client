@@ -8,6 +8,7 @@ $shadowColor: rgba(84,164,255,.3);
 
 @mixin button {
   background: $background;
+  color: $themeColor;
   border-radius: 10px;
   cursor: pointer;
   @include buttonIcon;
