@@ -1,4 +1,13 @@
 {
   "compilerOptions": {
+    "target": "es2018",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "composite": true,
+    "declaration": true,
+    "types": [
+      "node",
+      "jest"
+    ]
   }
 }

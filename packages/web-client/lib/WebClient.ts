@@ -1,19 +1,16 @@
-import { Store } from '../interfaces/Store';
-import { StoreLocal } from '@toonote/store-local';
 import { WebClientView } from './view/WebClientView';
-interface IStore{
-  new(options): Store
-}
+import { WebClientStore } from './store/WebClientStore';
+import { get as getSysConfig } from './sysConfig';
 
 export interface WebClientOptions {
-  container: string|HTMLElement,
-  storage?: IStore|string,
+  container: string|HTMLElement;
+  store?: string;
 }
 
 export class WebClient {
-  private container:HTMLElement
-  private storageClass: IStore
-  private view:WebClientView
+  private container:HTMLElement;
+  private view:WebClientView;
+  private store:WebClientStore;
   constructor(options: WebClientOptions){
     if(typeof options.container === 'string'){
         this.container = document.querySelector(options.container);
@@ -21,22 +18,23 @@ export class WebClient {
         this.container = options.container;
     }
 
-    if(options.storage){
-        if(typeof options.storage === 'string'){
-            this.storageClass = require(options.storage);
-        }else{
-            this.storageClass = options.storage;
-        }
-    }else{
-        this.storageClass = StoreLocal;
+    let store = options.store;
+
+    if(!store){
+      store = getSysConfig('STORE_PLUGIN');
+    }
+    if(!store){
+      store = '@toonote/store-local';
     }
 
     this.view = new WebClientView();
     this.view.mount(this.container);
 
-    if (import.meta.env.DEV){
+    this.store = new WebClientStore({ store });
+
+    // if (import.meta.env.DEV){
       this._test();
-    }
+    // }
   }
   _test(){
     this.view.data.user = {

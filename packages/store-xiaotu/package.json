@@ -1,0 +1,9 @@
+{
+  "name": "@toonote/store-xiaotu",
+  "version": "1.0.0",
+  "toonote": {
+    "plugin": {
+      "type": "store"
+    }
+  }
+}

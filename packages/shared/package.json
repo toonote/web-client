@@ -1,0 +1,6 @@
+{
+  "name": "@toonote/shared",
+  "version": "1.0.0",
+  "private": true,
+  "module": "main.ts"
+}

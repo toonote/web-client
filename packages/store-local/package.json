@@ -1,5 +1,15 @@
 {
-    "name": "@toonote/store-local",
+  "name": "@toonote/store-local",
+  "version": "1.0.0",
+  "module": "lib/index.ts",
+  "main": "dist/index.js",
+  "toonote": {
+    "name": "@toonote/store-xiaotu",
     "version": "1.0.0",
-    "module": "index.ts"
+    "toonote": {
+      "plugin": {
+        "type": "store"
+      }
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import { WebClientView } from '../view/WebClientView';
-import WebClientModel, { Notebook } from '../model/main';
+import WebClientModel, { Notebook } from '../store/WebClientStore';
 
 interface User {
     isLogin: boolean,
