@@ -6,6 +6,8 @@
 import { ref, onMounted } from 'vue';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
+import Highlight from '@tiptap/extension-highlight';
+import Typography from '@tiptap/extension-typography';
 
 export default {
   props: ['modelValue'],
@@ -15,7 +17,7 @@ export default {
     onMounted(() => {
       new Editor({
         element: editorElm.value,
-        extensions: [StarterKit],
+        extensions: [StarterKit, Highlight, Typography],
         content: props.modelValue,
         onUpdate: ({ editor }) => {
           ctx.emit('update:modelValue', editor.getHTML());
