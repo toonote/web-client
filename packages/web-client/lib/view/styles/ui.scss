@@ -1,6 +1,14 @@
+@use 'sass:color';
+
 $background: #fff;
 $themeColor: #54A4FF;
-$shadowColor: rgba(84,164,255,.3);
+$shadowColor: rgba(84, 164, 255, 1);
+
+@mixin shadow($depth) {
+  $realDepth: $depth + 5;
+  // box-shadow: 0 ($depth - 1) * 10px $depth*10px color.change($shadowColor, $alpha: $depth*0.1);
+  box-shadow: 0 ($realDepth - 5) * 0px $realDepth * 2px $realDepth * 0px color.change($shadowColor, $alpha: 0.4 - 0.02 * $realDepth);
+}
 
 @mixin buttonIcon{
   text-align: center;
@@ -15,5 +23,39 @@ $shadowColor: rgba(84,164,255,.3);
 }
 
 @mixin buttonShadow{
-  box-shadow: 0 0 10px $shadowColor;
+  // box-shadow: 0 0 10px $shadowColor;
+  @include shadow(1);
+}
+
+@mixin popup {
+  position: absolute;
+  padding: 10px;
+  border-radius: 10px;
+  background: white;;
+  z-index: 100;
+}
+
+@mixin popupShadow{
+  // box-shadow: 0 0 10px $shadowColor, 0 0 30px rgba(0, 0, 0, .1);
+  // box-shadow: 0 5px 30px $shadowColor;
+  @include shadow(5);
+}
+
+@mixin popupStart {
+  opacity: 0;
+  transition: opacity .4s;
+  transform: translateY(0px);
+}
+
+@mixin popupEnd {
+  opacity: 1;
+  transform: translateY(10px);
+}
+
+@mixin menuItem {
+  padding: 5px 20px;
+  cursor: default;
+  &:hover {
+    color: $themeColor;
+  }
 }
