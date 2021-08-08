@@ -1,5 +1,5 @@
 import { WebClient } from '@toonote/web-client';
 
-new WebClient({
+WebClient.getInstance({
     container: '#container',
 });

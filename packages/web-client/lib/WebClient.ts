@@ -11,12 +11,22 @@ export class WebClient {
   private container:HTMLElement;
   private view:WebClientView;
   private store:WebClientStore;
+  static async getInstance(options: WebClientOptions): Promise<WebClient>{
+    const webClient = new WebClient(options);
+    await webClient._init(options);
+    return webClient;
+  }
   constructor(options: WebClientOptions){
     if(typeof options.container === 'string'){
         this.container = document.querySelector(options.container);
     }else{
         this.container = options.container;
     }
+
+    this.view = new WebClientView();
+    this.view.mount(this.container);
+  }
+  private async _init(options: WebClientOptions){
 
     let store = options.store;
 
@@ -27,14 +37,24 @@ export class WebClient {
       store = '@toonote/store-local';
     }
 
-    this.view = new WebClientView();
-    this.view.mount(this.container);
 
-    this.store = new WebClientStore({ store });
+    this.store = await WebClientStore.getInstance({ store });
 
+    this.readData();
     // if (import.meta.env.DEV){
       this._test();
     // }
+  }
+  async readData(){
+    this.readNotebook();
+  }
+  async readNotebook(){
+    const notebookList = await this.store.getNotebookList();
+    if (!notebookList || !notebookList.length ) {
+      return;
+    }
+    const notebookData = await this.store.getNotebook(notebookList[0].id);
+    this.view.data.notebook = notebookData;
   }
   _test(){
     this.view.data.user = {

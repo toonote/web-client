@@ -1,18 +1,6 @@
-import { Store } from '@toonote/shared/interfaces/Store';
+import { NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
 // import { StoreLocal } from '@toonote/store-local';
 
-/* export interface Note {
-    id: string,
-    title: string,
-}
-
-export interface Notebook {
-    title: string,
-    categories: {
-        [key: string]: Note[]
-    }
-}
-*/
 
 export interface WebClientStoreConfig {
     store: string,
@@ -21,10 +9,13 @@ export interface WebClientStoreConfig {
 export class WebClientStore {
   private _store: string;
   private _storeInstance: Store;
+  static async getInstance(config:WebClientStoreConfig): Promise<WebClientStore>{
+    const store = new WebClientStore(config);
+    await store._initInstance();
+    return store;
+  }
   constructor(config:WebClientStoreConfig){
     this._store = config.store;
-    // test
-    this._initInstance();
   }
   private async _initInstance(){
     if(this._store === '@toonote/store-local'){
@@ -32,5 +23,13 @@ export class WebClientStore {
       this._storeInstance = new StoreClass();
     }
     // console.log(this._storeInstance);
+  }
+
+  async getNotebookList(): Promise<NotebookSummary[]> {
+    return this._storeInstance.getNotebookList();
+  }
+
+  async getNotebook(id: string): Promise<NotebookWithCategories> {
+    return this._storeInstance.getNotebookWithCategories(id);
   }
 }
