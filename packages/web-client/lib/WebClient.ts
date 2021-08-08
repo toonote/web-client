@@ -42,7 +42,7 @@ export class WebClient {
 
     this.readData();
     // if (import.meta.env.DEV){
-      this._test();
+      // this._test();
     // }
   }
   async readData(){
@@ -51,10 +51,26 @@ export class WebClient {
   async readNotebook(){
     const notebookList = await this.store.getNotebookList();
     if (!notebookList || !notebookList.length ) {
-      return;
+      await this.initData();
+      return this.readNotebook();
     }
     const notebookData = await this.store.getNotebook(notebookList[0].id);
+    console.log(notebookData);
     this.view.data.notebook = notebookData;
+  }
+  async initData(){
+    const notebook = await this.store.createNotebook({
+      title: '我的笔记',
+    });
+    const category = await this.store.createCategory({
+      title: '默认分类',
+      notebookId: notebook.id,
+    });
+    const note = await this.store.createNote({
+      title: '我的笔记',
+      content: '',
+      categoryId: category.id,
+    });
   }
   _test(){
     this.view.data.user = {
@@ -64,7 +80,7 @@ export class WebClient {
     this.view.data.editor[0] = {
       content: 'test',
     };
-    this.view.data.notebook = {
+    /* this.view.data.notebook = {
       id: 'test',
       title: '笔记本',
       categories: [
@@ -91,7 +107,7 @@ export class WebClient {
           }],
         }
       ],
-    };
+    }; */
   }
 }
 

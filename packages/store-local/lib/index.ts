@@ -50,7 +50,30 @@ export class StoreLocal implements Store {
     note.content = content;
     await this.updateNote(note);
   }
-  async getCategoryList(notebookId: string): Promise<CategorySummary[]> {
+  async createNote(data: Note): Promise<Note> {
+    const storageKey = this.getPrefix('NOTE', data.id);
+    this.setValue(storageKey, data);
+
+    const category = await this.getCategory(data.categoryId);
+    category.noteIds.push(data.id);
+
+    const categoryStorageKey = this.getPrefix('CATEGORY', data.categoryId);
+    this.setValue(categoryStorageKey, category);
+
+    return data;
+  }
+  async createCategory(data: CategorySummary): Promise<CategorySummary> {
+    const storageKey = this.getPrefix('CATEGORY', data.id);
+    this.setValue(storageKey, data);
+
+    const notebook = await this.getNotebook(data.notebookId);
+    notebook.categoryIds.push(data.id);
+
+    const notebookStorageKey = this.getPrefix('NOTEBOOK', data.notebookId);
+    this.setValue(notebookStorageKey, notebook);
+    return data;
+  }
+  /* async getCategoryList(notebookId: string): Promise<CategorySummary[]> {
     const storageKey = this.getPrefix('CATEGORY_LIST', notebookId)
     const categoryIdList = this.getValue(storageKey) as string[];
 
@@ -63,7 +86,7 @@ export class StoreLocal implements Store {
     }
 
     return categoryList;
-  }
+  } */
   async getCategory(categoryId: string): Promise<CategorySummary | null> {
     const storageKey = this.getPrefix('CATEGORY', categoryId);
     return this.getValue(storageKey);
@@ -77,21 +100,39 @@ export class StoreLocal implements Store {
       ret.push({
         id: note.id,
         title: note.title,
+        categoryId: note.categoryId,
+        createdAt: note.createdAt,
+        updatedAt: note.updatedAt,
       });
     }
     return ret;
   }
-  async getNotebookList(): Promise<NoteSummary[]> {
-    const storageKey = this.getPrefix('NOTEBOOK_LIST', 'NOTEBOOK_LIST');
+  async createNotebook(data: NotebookSummary): Promise<NotebookSummary> {
+    const storageKey = this.getPrefix('NOTEBOOK', data.id);
+    this.setValue(storageKey, data);
+
+    // add to notebook list
+    let notebookList = await this.getNotebookList();
+    if(!notebookList) notebookList = [];
+    notebookList.push(data);
+    const notebookStorageKey = this.getPrefix('NOTEBOOK_LIST');
+    this.setValue(notebookStorageKey, notebookList);
+    return data;
+  }
+  async getNotebookList(): Promise<NotebookSummary[]> {
+    const storageKey = this.getPrefix('NOTEBOOK_LIST');
+    return this.getValue(storageKey);
+  }
+  async getNotebook(notebookId: string): Promise<NotebookSummary> {
+    const storageKey = this.getPrefix('NOTEBOOK', notebookId);
     return this.getValue(storageKey);
   }
   async getNotebookWithCategories(notebookId: string): Promise<NotebookWithCategories> {
     const storageKey = this.getPrefix('NOTEBOOK', notebookId);
     const notebook = this.getValue(storageKey) as NotebookWithCategories;
     if(!notebook) return null;
-    const categoryList = await this.getCategoryList(notebookId);
-    for (let i = 0; i < categoryList.length; i++) {
-      const category = categoryList[i] as Category;
+    for (let i = 0; i < notebook.categoryIds.length; i++) {
+      const category = await this.getCategory(notebook.categoryIds[i]) as Category;
       category.notes = await this.getCategoryNoteSummaryList(category.id);
       if (!notebook.categories) {
         notebook.categories = [];

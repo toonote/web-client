@@ -1,4 +1,5 @@
-import { NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
+import { CategoryCreate, CategorySummary, Note, NoteCreate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
+import { idGen } from './idGen';
 // import { StoreLocal } from '@toonote/store-local';
 
 
@@ -31,5 +32,37 @@ export class WebClientStore {
 
   async getNotebook(id: string): Promise<NotebookWithCategories> {
     return this._storeInstance.getNotebookWithCategories(id);
+  }
+
+  async createNotebook(data: NotebookCreate): Promise<NotebookSummary>{
+    const createData: NotebookSummary = {
+      id: idGen(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      categoryIds: [],
+      ...data,
+    };
+    return this._storeInstance.createNotebook(createData);
+  }
+
+  async createCategory(data: CategoryCreate): Promise<CategorySummary>{
+    const createData: CategorySummary = {
+      id: idGen(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      noteIds: [],
+      ...data,
+    };
+    return this._storeInstance.createCategory(createData);
+  }
+
+  async createNote(data: NoteCreate): Promise<Note>{
+    const createData: Note = {
+      id: idGen(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...data,
+    };
+    return this._storeInstance.createNote(createData);
   }
 }
