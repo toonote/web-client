@@ -63,7 +63,7 @@
 	</v-contextmenu> -->
 </template>
 <script>
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { getData } from '../viewData';
 
 const useFold = () => {
@@ -82,10 +82,15 @@ const useFold = () => {
 };
 
 const useCurrentNote = () => {
-  const currentNoteId = ref('n2');
+
+  const editorData = getData('editor').value;
+  const currentNoteId = computed(() => {
+    if(!editorData || !editorData[0]){ return ''; }
+    return editorData[0].id;
+  });
 
   const switchCurrentNote = function(id){
-    currentNoteId.value = id;
+    // currentNoteId.value = id;
     /* ctx.root.$webClient.$emit('note.switchActive', {
       id
     }); */

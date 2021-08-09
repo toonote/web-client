@@ -87,9 +87,9 @@ export class WebClient {
       name: 'TooBug',
       avatarUrl: 'https://avatars3.githubusercontent.com/u/1243593?s=100&v=4',
     };
-    this.view.data.editor[0] = {
+    /* this.view.data.editor[0] = {
       content: 'test',
-    };
+    }; */
     /* this.view.data.notebook = {
       id: 'test',
       title: '笔记本',
