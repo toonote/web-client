@@ -46,7 +46,8 @@ export class WebClient {
     // }
   }
   async readData(){
-    this.readNotebook();
+    await this.readNotebook();
+    await this.readNote();
   }
   async readNotebook(){
     const notebookList = await this.store.getNotebookList();
@@ -55,8 +56,17 @@ export class WebClient {
       return this.readNotebook();
     }
     const notebookData = await this.store.getNotebook(notebookList[0].id);
-    console.log(notebookData);
     this.view.data.notebook = notebookData;
+  }
+  async readNote(){
+    // todo: 上次状态恢复
+    const noteSummary = this.view.data.notebook.categories[0].notes[0];
+    const note = await this.store.getNote(noteSummary.id);
+    this.view.data.editor[0] = {
+      id: note.id,
+      content: note.content,
+      title: note.title,
+    };
   }
   async initData(){
     const notebook = await this.store.createNotebook({

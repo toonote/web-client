@@ -6,6 +6,8 @@ export interface ViewDataUser {
 }
 
 export interface ViewDataEditor {
+  id: string,
+  title: string,
   content: string,
 }
 

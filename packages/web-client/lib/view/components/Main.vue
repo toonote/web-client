@@ -6,7 +6,12 @@
     </div>
     <div class="row main">
       <notebook-tree class="notebookTree" />
-      <editor v-if="editor[0]" class="editor" v-model="editor[0].content"></editor>
+      <div class="editor-wrapper" v-if="editor[0]">
+        <div class="title-editor">
+          <input type="text" :value="editor[0].title" />
+        </div>
+        <editor class="editor" v-model="editor[0].content"></editor>
+      </div>
     </div>
     <!--
         <preview class="preview" :content="editor.data.content"></preview>-->
@@ -72,6 +77,7 @@ body{
 }
 </style>
 <style lang="scss">
+@import "../styles/ui.scss";
 /*动画*/
 /* .slide-enter-active, .slide-leave-active {
 	transition: width .5s;
@@ -108,10 +114,26 @@ body{
     width: 230px;
     margin: 0 30px;
   }
-  .editor{
+  .editor-wrapper{
     flex: 1;
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    // margin-top: 10px;
     margin-right: 30px;
+    .title-editor {
+      margin-bottom: 30px;
+      input[type=text]{
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+        width: 100%;
+        border: 0 none;
+        font-size: 2em;
+        color: #666;
+        font-weight: bold;
+        &:focus {
+          outline: 0 none;
+        }
+      }
+    }
   }
 }
 </style>

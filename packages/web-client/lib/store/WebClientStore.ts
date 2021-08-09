@@ -65,4 +65,8 @@ export class WebClientStore {
     };
     return this._storeInstance.createNote(createData);
   }
+
+  async getNote(id: string): Promise<Note>{
+    return this._storeInstance.getNote(id);
+  }
 }

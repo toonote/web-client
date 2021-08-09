@@ -35,7 +35,9 @@ export default {
 
 <style lang="scss">
 @import './styles/content.scss';
-
+.editor {
+  flex: 1;
+}
 .ProseMirror{
   height: 100%;
 }
