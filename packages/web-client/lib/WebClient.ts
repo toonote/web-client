@@ -1,7 +1,8 @@
 import { WebClientView } from './view/WebClientView';
+import { ViewDataEditor } from './view/interfaces/ViewData';
 import { WebClientStore } from './store/WebClientStore';
 import { get as getSysConfig } from './sysConfig';
-
+import { eventHub, EVENTS } from './utils/eventHub';
 export interface WebClientOptions {
   container: string|HTMLElement;
   store?: string;
@@ -41,6 +42,8 @@ export class WebClient {
     this.store = await WebClientStore.getInstance({ store });
 
     this.readData();
+
+    this.initEvent();
     // if (import.meta.env.DEV){
       // this._test();
     // }
@@ -80,6 +83,14 @@ export class WebClient {
       title: '我的笔记',
       content: '',
       categoryId: category.id,
+    });
+  }
+  async initEvent(){
+    eventHub.on(EVENTS.UPDATE_NOTE, async (data: ViewDataEditor) => {
+      await this.store.updateNote(data.id, {
+        title: data.title,
+        content: data.content,
+      });
     });
   }
   _test(){

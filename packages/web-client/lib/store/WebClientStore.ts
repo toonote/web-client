@@ -1,4 +1,4 @@
-import { CategoryCreate, CategorySummary, Note, NoteCreate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
+import { CategoryCreate, CategorySummary, Note, NoteCreate, NoteUpdate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
 import { idGen } from './idGen';
 // import { StoreLocal } from '@toonote/store-local';
 
@@ -64,6 +64,10 @@ export class WebClientStore {
       ...data,
     };
     return this._storeInstance.createNote(createData);
+  }
+
+  async updateNote(id: string, data: NoteUpdate) {
+    return this._storeInstance.updateNote(id, data);
   }
 
   async getNote(id: string): Promise<Note>{

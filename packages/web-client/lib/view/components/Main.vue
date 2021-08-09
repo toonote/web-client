@@ -8,7 +8,7 @@
       <notebook-tree class="notebookTree" />
       <div class="editor-wrapper" v-if="editor[0]">
         <div class="title-editor">
-          <input type="text" :value="editor[0].title" />
+          <input type="text" v-model="editor[0].title" />
         </div>
         <editor class="editor" v-model="editor[0].content"></editor>
       </div>
@@ -20,16 +20,23 @@
   </div>
 </template>
 
-<script type="ts">
-// import { reactive, watch } from 'vue';
+<script lang="ts">
+import { ComputedRef, watch } from 'vue';
+import Editor from '@toonote/editor-tiptap';
 
+import { ViewDataEditor } from '../interfaces/ViewData';
 import { getData } from '../viewData';
+import { eventHub, EVENTS } from '../../utils/eventHub';
 import NotebookTree from './NotebookTree.vue';
 import Toolbar from './Toolbar.vue';
-import Editor from '@toonote/editor-tiptap';
 import UserInfo from './UserInfo.vue';
 // import Preview from './Preview.vue';
 // import Login from './Login.vue';
+
+const isNoteChanged = (newData: ViewDataEditor, oldData: ViewDataEditor): boolean => {
+  return true;
+  // return newData.title !== oldData.title || newData.content !== oldData.content;
+};
 
 export default {
   components: {
@@ -41,7 +48,16 @@ export default {
     // Login,
   },
   setup(props, ctx){
-    const editor = getData('editor');
+    const editor = getData('editor') as unknown as ComputedRef<ViewDataEditor[]>;
+
+    // oldValue is same as newValue, strange...
+    watch(editor.value, (newValue, oldValue) => {
+      for (let i = 0; i < newValue.length; i++) {
+        if (isNoteChanged(newValue[i], oldValue[i])) {
+          eventHub.emit(EVENTS.UPDATE_NOTE, newValue[i]);
+        }
+      }
+    });
       // const editor = reactive(getData('editor'));
       // const userInfo = reactive(getData('userInfo'));
 

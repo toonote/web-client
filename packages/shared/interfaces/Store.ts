@@ -12,6 +12,8 @@ export interface Note extends NoteSummary {
 
 export type NoteCreate = Omit<Note, 'id' | 'createdAt' | 'updatedAt'>;
 
+export type NoteUpdate = Partial<NoteCreate>;
+
 export interface CategorySummary {
   id: string;
   title: string;
@@ -45,7 +47,7 @@ export interface Store{
   getConfig(key: string);
   setConfig(key: string, value): Promise<void>;
   getNote(noteId: string): Promise<Note|null>;
-  updateNote(note: Note): Promise<void>;
+  updateNote(id: string, data: NoteUpdate): Promise<void>;
   setNoteContent(noteId: string, content: string): Promise<void>;
   createNote(note: Note): Promise<Note>
   getCategory(categoryId: string): Promise<CategorySummary>;

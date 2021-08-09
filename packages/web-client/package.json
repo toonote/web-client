@@ -6,6 +6,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "mitt": "^3.0.0",
     "vue": "^3.1.1"
   }
 }

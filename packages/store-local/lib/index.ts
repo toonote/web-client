@@ -1,4 +1,4 @@
-import { Note, NoteSummary, Category, CategorySummary, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
+import { Note, NoteSummary, NoteUpdate, Category, CategorySummary, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
 
 export interface StoreLocalOptions{
   prefix?: string;
@@ -38,17 +38,20 @@ export class StoreLocal implements Store {
     const storageKey = this.getPrefix('NOTE', noteId);
     return this.getValue(storageKey);
   }
-  async updateNote(note: Note): Promise<void> {
-    const storageKey = this.getPrefix('NOTE', note.id);
-    this.setValue(storageKey, note);
+  async updateNote(id: string, data: NoteUpdate): Promise<void> {
+    const note = await this.getNote(id);
+    if (!note) {
+      throw new Error('note not exists.');
+    }
+    const newNote = {
+      ...note,
+      ...data,
+    };
+    const storageKey = this.getPrefix('NOTE', id);
+    this.setValue(storageKey, newNote);
   }
   async setNoteContent(noteId: string, content: string): Promise<void> {
-    const note = await this.getNote(noteId);
-    if(!note){
-      throw new Error('note note exists.');
-    }
-    note.content = content;
-    await this.updateNote(note);
+    await this.updateNote(noteId, { content });
   }
   async createNote(data: Note): Promise<Note> {
     const storageKey = this.getPrefix('NOTE', data.id);
