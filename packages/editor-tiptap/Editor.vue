@@ -8,6 +8,7 @@ import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
+import Placeholder from '@tiptap/extension-placeholder';
 
 export default {
   props: ['modelValue'],
@@ -17,7 +18,7 @@ export default {
     onMounted(() => {
       new Editor({
         element: editorElm.value,
-        extensions: [StarterKit, Highlight, Typography],
+        extensions: [StarterKit, Highlight, Typography, Placeholder],
         content: props.modelValue,
         onUpdate: ({ editor }) => {
           ctx.emit('update:modelValue', editor.getHTML());
@@ -43,5 +44,12 @@ export default {
 }
 .ProseMirror{
   @include content;
+}
+.ProseMirror .is-editor-empty::before{
+  content: attr(data-placeholder);
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
 }
 </style>
