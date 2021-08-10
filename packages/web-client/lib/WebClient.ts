@@ -105,8 +105,14 @@ export class WebClient {
 
     // update note title
     eventHub.on(EVENTS.UPDATE_NOTE_TITLE, async (title: string) => {
-      console.log('update_note_title', title);
       this.readNotebook();
+    });
+
+    eventHub.on(EVENTS.SWITCH_CURRENT_NOTE, async (id: string) => {
+      const note = await this.store.getNote(id);
+      this.view.data.editor[0] = {
+        ...note,
+      };
     });
 
   }

@@ -62,9 +62,10 @@
 		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
 	</v-contextmenu> -->
 </template>
-<script>
+<script lang="ts">
 import { computed, reactive, ref } from 'vue';
 import { getData } from '../viewData';
+import { eventHub, EVENTS } from '../../utils/eventHub';
 
 const useFold = () => {
   const foldMap = reactive({});
@@ -89,11 +90,9 @@ const useCurrentNote = () => {
     return editorData[0].id;
   });
 
-  const switchCurrentNote = function(id){
-    // currentNoteId.value = id;
-    /* ctx.root.$webClient.$emit('note.switchActive', {
-      id
-    }); */
+  const switchCurrentNote = function(id: string){
+    if (!id) return;
+    eventHub.emit(EVENTS.SWITCH_CURRENT_NOTE, id);
   }
 
   return { currentNoteId, switchCurrentNote };
