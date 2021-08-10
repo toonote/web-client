@@ -3,6 +3,7 @@ import { ViewDataEditor } from './view/interfaces/ViewData';
 import { WebClientStore } from './store/WebClientStore';
 import { get as getSysConfig } from './sysConfig';
 import { eventHub, EVENTS } from './utils/eventHub';
+import { NoteCreate } from '@toonote/shared/interfaces/Store';
 export interface WebClientOptions {
   container: string|HTMLElement;
   store?: string;
@@ -66,9 +67,7 @@ export class WebClient {
     const noteSummary = this.view.data.notebook.categories[0].notes[0];
     const note = await this.store.getNote(noteSummary.id);
     this.view.data.editor[0] = {
-      id: note.id,
-      content: note.content,
-      title: note.title,
+      ...note,
     };
   }
   async initData(){
@@ -86,12 +85,30 @@ export class WebClient {
     });
   }
   async initEvent(){
+
+    // carete note
+    eventHub.on(EVENTS.CREATE_NOTE, async (data: NoteCreate) => {
+      const newNote = await this.store.createNote(data);
+      this.view.data.editor[0] = {
+        ...newNote,
+      }
+      this.readNotebook();
+    });
+
+    // update note
     eventHub.on(EVENTS.UPDATE_NOTE, async (data: ViewDataEditor) => {
       await this.store.updateNote(data.id, {
         title: data.title,
         content: data.content,
       });
     });
+
+    // update note title
+    eventHub.on(EVENTS.UPDATE_NOTE_TITLE, async (title: string) => {
+      console.log('update_note_title', title);
+      this.readNotebook();
+    });
+
   }
   _test(){
     this.view.data.user = {

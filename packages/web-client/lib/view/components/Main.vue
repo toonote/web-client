@@ -22,9 +22,9 @@
 
 <script lang="ts">
 import { ComputedRef, watch } from 'vue';
+import { Note } from '@toonote/shared/interfaces/Store';
 import Editor from '@toonote/editor-tiptap';
 
-import { ViewDataEditor } from '../interfaces/ViewData';
 import { getData } from '../viewData';
 import { eventHub, EVENTS } from '../../utils/eventHub';
 import NotebookTree from './NotebookTree.vue';
@@ -33,7 +33,7 @@ import UserInfo from './UserInfo.vue';
 // import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
-const isNoteChanged = (newData: ViewDataEditor, oldData: ViewDataEditor): boolean => {
+const isNoteChanged = (newData: Note, oldData: Note): boolean => {
   return true;
   // return newData.title !== oldData.title || newData.content !== oldData.content;
 };
@@ -48,7 +48,7 @@ export default {
     // Login,
   },
   setup(props, ctx){
-    const editor = getData('editor') as unknown as ComputedRef<ViewDataEditor[]>;
+    const editor = getData('editor') as unknown as ComputedRef<Note[]>;
 
     // oldValue is same as newValue, strange...
     watch(editor.value, (newValue, oldValue) => {
@@ -57,6 +57,11 @@ export default {
           eventHub.emit(EVENTS.UPDATE_NOTE, newValue[i]);
         }
       }
+    });
+
+    watch(() => editor.value[0] && editor.value[0].title, (newTitle: string, oldTitle: string) => {
+      if(typeof newTitle === 'undefined' || typeof oldTitle === 'undefined') return;
+      eventHub.emit(EVENTS.UPDATE_NOTE_TITLE, newTitle);
     });
       // const editor = reactive(getData('editor'));
       // const userInfo = reactive(getData('userInfo'));

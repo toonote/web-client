@@ -10,7 +10,7 @@
         </div>
       </template>
       <template v-slot:popupContent>
-        <menu-item>
+        <menu-item @click="createNote">
           <svg-icon className="icon" icon="notebook/note" />
           <span>笔记</span>
         </menu-item>
@@ -19,7 +19,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { ComputedRef } from 'vue';
+import { Note, NoteCreate } from '@toonote/shared/interfaces/Store';
+
+import { getData } from '../viewData';
+import { eventHub, EVENTS } from '../../utils/eventHub';
 
 import Popup from './ui/Popup.vue';
 import MenuItem from './ui/MenuItem.vue';
@@ -28,7 +33,20 @@ export default {
   components: {
     Popup,
     MenuItem,
-  }
+  },
+  setup() {
+    const editor = getData('editor') as unknown as ComputedRef<Note[]>;
+    const createNote = () => {
+      const currentNote = editor.value[0] as Note;
+      const newNote: NoteCreate = {
+        title: '新笔记',
+        content: '',
+        categoryId: currentNote.categoryId,
+      };
+      eventHub.emit(EVENTS.CREATE_NOTE, newNote);
+    };
+    return { createNote };
+  },
 }
 </script>
 

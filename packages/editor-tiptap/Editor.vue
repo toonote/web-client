@@ -2,8 +2,8 @@
   <div class="editor" ref="editorElm"></div>
 </template>
 
-<script>
-import { ref, onMounted } from 'vue';
+<script lang="ts">
+import { watch, ref, onMounted } from 'vue';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
@@ -14,9 +14,10 @@ export default {
   props: ['modelValue'],
   setup(props, ctx) {
     const editorElm = ref(null);
+    let editor:Editor = null;
 
     onMounted(() => {
-      new Editor({
+      editor = new Editor({
         element: editorElm.value,
         extensions: [StarterKit, Highlight, Typography, Placeholder],
         content: props.modelValue,
@@ -24,6 +25,10 @@ export default {
           ctx.emit('update:modelValue', editor.getHTML());
         },
       });
+    });
+
+    watch(() => props.modelValue, (content: string) => {
+      editor.commands.setContent(content);
     });
 
     return {
