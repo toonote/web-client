@@ -115,6 +115,10 @@ export class WebClient {
       };
     });
 
+    eventHub.on(EVENTS.DELETE_NOTE, async (id: string) => {
+      await this.store.deleteNote(id);
+      this.readNotebook();
+    });
   }
   _test(){
     this.view.data.user = {

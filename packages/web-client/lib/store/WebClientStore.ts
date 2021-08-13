@@ -70,6 +70,10 @@ export class WebClientStore {
     return this._storeInstance.updateNote(id, data);
   }
 
+  async deleteNote(id: string): Promise<void> {
+    return this._storeInstance.deleteNote(id);
+  }
+
   async getNote(id: string): Promise<Note>{
     return this._storeInstance.getNote(id);
   }

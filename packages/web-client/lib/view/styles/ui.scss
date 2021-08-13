@@ -2,6 +2,7 @@
 
 $background: #fff;
 $themeColor: #54A4FF;
+$dangerColor: #E74C3C;
 $shadowColor: rgba(84, 164, 255, 1);
 
 @mixin shadow($depth) {
@@ -10,16 +11,42 @@ $shadowColor: rgba(84, 164, 255, 1);
   box-shadow: 0 ($realDepth - 5) * 0px $realDepth * 2px $realDepth * 0px color.change($shadowColor, $alpha: 0.4 - 0.02 * $realDepth);
 }
 
+@mixin buttonGroup{
+  text-align: center;
+  button {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 @mixin buttonIcon{
   text-align: center;
 }
 
 @mixin button {
+  border: 1px solid $themeColor;
   background: $background;
   color: $themeColor;
-  border-radius: 10px;
   cursor: pointer;
   @include buttonIcon;
+  &.primary {
+    background: $themeColor;
+    color: $background;
+  }
+  &.danger {
+    background: $dangerColor;
+    border-color: $dangerColor;
+    color: $background;
+  }
+}
+
+@mixin smallButton {
+  @include button;
+  width: 50px;
+  height: 24px;
+  border-radius: 5px;
 }
 
 @mixin buttonShadow{

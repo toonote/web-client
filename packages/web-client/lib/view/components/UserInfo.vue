@@ -39,8 +39,8 @@ export default {
 	margin:0 auto;
 }
 .userInfo .avatar{
-	width: $buttonSize;
-	height: $buttonSize;
+	width: $toolbarButtonSize;
+	height: $toolbarButtonSize;
 	border-radius: 10px;
 	float: left;
 }

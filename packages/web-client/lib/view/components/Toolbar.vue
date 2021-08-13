@@ -60,10 +60,12 @@ export default {
 
 .btn{
   @include button;
-  width: $buttonSize;
-  height: $buttonSize;
+  width: $toolbarButtonSize;
+  height: $toolbarButtonSize;
+  border: 0 none;
+  border-radius: 10px;
   font-size: 18px;
-  line-height: $buttonSize;
+  line-height: $toolbarButtonSize;
   &.active, &:hover{
     @include buttonShadow;
   }

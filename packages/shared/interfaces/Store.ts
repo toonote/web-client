@@ -49,7 +49,8 @@ export interface Store{
   getNote(noteId: string): Promise<Note|null>;
   updateNote(id: string, data: NoteUpdate): Promise<void>;
   setNoteContent(noteId: string, content: string): Promise<void>;
-  createNote(note: Note): Promise<Note>
+  createNote(note: Note): Promise<Note>;
+  deleteNote(noteId: string): Promise<void>;
   getCategory(categoryId: string): Promise<CategorySummary>;
   getCategoryNoteSummaryList(categoryId: string): Promise<NoteSummary[]>;
   createCategory(category: CategoryCreate): Promise<CategorySummary>;

@@ -14,21 +14,38 @@
 					tag="ul"
 					droppable="true"
 					v-show="!foldMap[category.id]"
-					v-on:drop="drop"
 					>
-					<li
-						draggable="true"
-						:key="note.id"
-						:class="{active:note.id === currentNoteId}"
+          <template
 						v-for="note in category.notes"
-						@contextmenu="showContextMenu('note', note.id)"
-						@click.stop="switchCurrentNote(note.id)"
-						@dragstart="dragStart($event, note.id)"
-						@dragover.prevent="dragOver($event, note.id)"
-					>
-            <svg-icon className="icon" icon="notebook/note" />
-            <span>{{note.title}}</span>
-          </li>
+            :key="note.id"
+          >
+            <li
+              draggable="true"
+              :class="{active:note.id === currentNoteId}"
+              @contextmenu="showContextMenu('note', note.id)"
+              @click.stop="switchCurrentNote(note.id)"
+              @dragstart="dragStart($event, note.id)"
+              @dragover.prevent="dragOver($event, note.id)"
+            >
+              <svg-icon className="icon" icon="notebook/note" />
+              <span>{{note.title}}</span>
+              <svg-icon
+                className="icon delete"
+                icon="notebook/note"
+                @click.stop="pendingDeleteNote(note.id)"
+              />
+            </li>
+            <li
+              v-if="pendingDeleteNoteId === note.id"
+              class="note-delete-confirm"
+            >
+              <p>确认删除？</p>
+              <div class="note-delete-op">
+                <button class="ui-button danger" @click.stop="deleteNote(note.id)">确认</button>
+                <button class="ui-button" @click.stop="pendingDeleteNoteId = ''">取消</button>
+              </div>
+            </li>
+          </template>
 				</transition-group>
 			</li>
 		</ul>
@@ -98,11 +115,28 @@ const useCurrentNote = () => {
   return { currentNoteId, switchCurrentNote };
 };
 
+const useDeleteNote = () => {
+  const pendingDeleteNoteId = ref('');
+
+  const pendingDeleteNote = function(id: string) {
+    pendingDeleteNoteId.value = id;
+  };
+
+  const deleteNote = function(id: string) {
+    eventHub.emit(EVENTS.DELETE_NOTE, id);
+    pendingDeleteNoteId.value = '';
+  };
+
+  return { pendingDeleteNoteId, pendingDeleteNote, deleteNote };
+};
+
 export default {
   setup(props, ctx){
     const notebook = getData('notebook');
 
     const { currentNoteId, switchCurrentNote } = useCurrentNote();
+    const { pendingDeleteNoteId, pendingDeleteNote, deleteNote } = useDeleteNote();
+    console.log(pendingDeleteNoteId);
     const { foldMap, switchFold } = useFold();
 
     return {
@@ -111,6 +145,9 @@ export default {
       currentNoteId,
       switchCurrentNote,
       switchFold,
+      pendingDeleteNoteId,
+      pendingDeleteNote,
+      deleteNote,
     };
   }
 };
@@ -145,6 +182,24 @@ ul{
       &.active {
         color: $themeColor;
       }
+      .delete {
+        float: right;
+        margin-top: 8px;
+        display: none;
+      }
+      &:hover .delete{
+        display: block;
+      }
+    }
+  }
+}
+
+.note-delete-confirm{
+  text-align: center;
+  .note-delete-op{
+    @include buttonGroup;
+    button {
+      @include smallButton;
     }
   }
 }
@@ -154,37 +209,9 @@ ul{
 .wrapper li.active{
 	background: #CECECE;
 }
-.wrapper li.note::before{
-	padding-right:3px;
-	background-image:url(../images/icon-file.png);
-}
-.wrapper li.folder::before{
-	padding-right:3px;
-	background-image:url(../images/icon-folder.png);
-}
+
 .wrapper .note-list-move {
 	transition: transform .4s;
 }
 
-.contextMenu{
-	position: absolute;
-	background: #F6F6F6;
-	border: 1px solid #E0E0E0;
-	font-size: 14px;
-}
-.contextMenu ul{
-	list-style: none;
-}
-.contextMenu ul li{
-	padding: 10px 20px;
-	cursor: pointer;
-}
-.contextMenu ul li:hover,
-.contextMenu ul li.active{
-	background: #CECECE;
-}
-
-.icon {
-  font-size: 12px;
-}
 </style>
