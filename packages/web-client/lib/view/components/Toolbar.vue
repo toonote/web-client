@@ -14,6 +14,10 @@
           <svg-icon className="icon" icon="notebook/note" />
           <span>笔记</span>
         </menu-item>
+        <menu-item @click="createCategory">
+          <svg-icon className="icon" icon="notebook/folder" />
+          <span>分类</span>
+        </menu-item>
       </template>
     </popup>
   </div>
@@ -45,7 +49,12 @@ export default {
       };
       eventHub.emit(EVENTS.CREATE_NOTE, newNote);
     };
-    return { createNote };
+
+    const createCategory = () => {
+      eventHub.emit(EVENTS.PENDING_CREATE_CATEGORY);
+    };
+
+    return { createNote, createCategory };
   },
 }
 </script>

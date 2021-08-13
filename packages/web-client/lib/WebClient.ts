@@ -119,6 +119,20 @@ export class WebClient {
       await this.store.deleteNote(id);
       this.readNotebook();
     });
+
+    eventHub.on(EVENTS.CREATE_CATEGORY, async (title: string) => {
+      const newCategory = await this.store.createCategory({
+        notebookId: this.view.data.notebook.id,
+        title,
+      });
+      const note = await this.store.createNote({
+        title: '我的笔记',
+        content: '',
+        categoryId: newCategory.id,
+      });
+      this.readNotebook();
+    });
+
   }
   _test(){
     this.view.data.user = {

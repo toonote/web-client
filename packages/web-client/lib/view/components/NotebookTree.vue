@@ -48,6 +48,15 @@
           </template>
 				</transition-group>
 			</li>
+      <li class="pendingCreateCategory" v-if="isPendingCreateCategory">
+        <svg-icon className="icon" icon="notebook/folder" />
+        <input
+          v-model="pendingCreateCategoryTitle"
+          ref="pendingCreateCategoryTitleInput"
+          @keydown.enter="createCategory"
+          @keydown.esc="cancelCreateCategory"
+        />
+      </li>
 		</ul>
   </section>
     <!-- <section class="searchWrapper">
@@ -80,7 +89,7 @@
 	</v-contextmenu> -->
 </template>
 <script lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, nextTick, reactive, ref } from 'vue';
 import { getData } from '../viewData';
 import { eventHub, EVENTS } from '../../utils/eventHub';
 
@@ -130,24 +139,48 @@ const useDeleteNote = () => {
   return { pendingDeleteNoteId, pendingDeleteNote, deleteNote };
 };
 
+const useCreateCategory = () => {
+  const isPendingCreateCategory = ref(false);
+  const pendingCreateCategoryTitle = ref('');
+  const pendingCreateCategoryTitleInput = ref(null);
+
+  const cancelCreateCategory = () => {
+    isPendingCreateCategory.value = false;
+    pendingCreateCategoryTitle.value = '';
+  };
+
+  const createCategory = () => {
+    if (pendingCreateCategoryTitle.value) {
+      eventHub.emit(EVENTS.CREATE_CATEGORY, pendingCreateCategoryTitle.value);
+    }
+    cancelCreateCategory();
+  }
+
+  eventHub.on(EVENTS.PENDING_CREATE_CATEGORY, () => {
+    isPendingCreateCategory.value = true;
+    nextTick(() => {
+      pendingCreateCategoryTitleInput.value.focus();
+    });
+  });
+
+  return { isPendingCreateCategory, pendingCreateCategoryTitle, pendingCreateCategoryTitleInput, createCategory, cancelCreateCategory };
+};
+
 export default {
   setup(props, ctx){
     const notebook = getData('notebook');
 
-    const { currentNoteId, switchCurrentNote } = useCurrentNote();
-    const { pendingDeleteNoteId, pendingDeleteNote, deleteNote } = useDeleteNote();
-    console.log(pendingDeleteNoteId);
-    const { foldMap, switchFold } = useFold();
+    const currentNote = useCurrentNote();
+    const deleteNote = useDeleteNote();
+    const createCategory = useCreateCategory();
+    const fold = useFold();
 
     return {
       notebook,
-      foldMap,
-      currentNoteId,
-      switchCurrentNote,
-      switchFold,
-      pendingDeleteNoteId,
-      pendingDeleteNote,
-      deleteNote,
+      ...fold,
+      ...currentNote,
+      ...deleteNote,
+      ...createCategory,
     };
   }
 };
