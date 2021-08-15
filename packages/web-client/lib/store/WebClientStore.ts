@@ -1,4 +1,4 @@
-import { CategoryCreate, CategorySummary, Note, NoteCreate, NoteUpdate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store } from '@toonote/shared/interfaces/Store';
+import { CategoryCreate, CategorySummary, Note, NoteCreate, NoteUpdate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store, CategoryUpdate } from '@toonote/shared/interfaces/Store';
 import { idGen } from './idGen';
 // import { StoreLocal } from '@toonote/store-local';
 
@@ -54,6 +54,18 @@ export class WebClientStore {
       ...data,
     };
     return this._storeInstance.createCategory(createData);
+  }
+
+  async deleteCategory(id: string): Promise<void> {
+    const noteList = await this._storeInstance.getCategoryNoteSummaryList(id);
+    for(const note of noteList){
+      await this._storeInstance.deleteNote(note.id);
+    }
+    return this._storeInstance.deleteCategory(id);
+  }
+
+  async updateCategory(id: string, data: CategoryUpdate) {
+    await this._storeInstance.updateCategory(id, data);
   }
 
   async createNote(data: NoteCreate): Promise<Note>{

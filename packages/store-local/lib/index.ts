@@ -106,6 +106,32 @@ export class StoreLocal implements Store {
     return data;
   }
 
+  async deleteCategory(categoryId: string): Promise<void> {
+    const category = await this.getCategory(categoryId);
+    if (!category) {
+      throw new Error('category not exists.');
+    }
+    const notebook = await this.getNotebook(category.notebookId);
+    notebook.categoryIds = notebook.categoryIds.filter(id => id !== categoryId);
+    const notebookStorageKey = this.getPrefix('NOTEBOOK', category.notebookId);
+    this.setValue(notebookStorageKey, notebook);
+    const categoryStorageKey = this.getPrefix('CATEGORY', categoryId);
+    this.setValue(categoryStorageKey);
+  }
+
+  async updateCategory(categoryId: string, data: CategoryUpdate): Promise<void> {
+    const category = await this.getCategory(categoryId);
+    if (!category) {
+      throw new Error('category not exists.');
+    }
+    const newCategory = {
+      ...category,
+      ...data,
+    };
+    const storageKey = this.getPrefix('CATEGORY', categoryId);
+    this.setValue(storageKey, newCategory);
+  }
+
   /* async getCategoryList(notebookId: string): Promise<CategorySummary[]> {
     const storageKey = this.getPrefix('CATEGORY_LIST', notebookId)
     const categoryIdList = this.getValue(storageKey) as string[];

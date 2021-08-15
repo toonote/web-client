@@ -1,3 +1,7 @@
+export type UpdateWrapper<T> = T & {
+  id: string;
+}
+
 export interface NoteSummary {
   id: string;
   title: string;
@@ -29,6 +33,8 @@ export interface Category extends CategorySummary {
 
 export type CategoryCreate = Omit<CategorySummary, 'id' | 'createdAt' | 'updatedAt' | 'noteIds'>;
 
+export type CategoryUpdate = Partial<CategoryCreate>;
+
 export interface NotebookSummary {
   id: string;
   title: string;
@@ -44,7 +50,7 @@ export interface NotebookWithCategories extends NotebookSummary {
 export type NotebookCreate = Omit<NotebookSummary, 'id' | 'createdAt' | 'updatedAt' | 'categoryIds'>;
 
 export interface Store{
-  getConfig(key: string);
+  getConfig(key: string): Promise<unknown>;
   setConfig(key: string, value): Promise<void>;
   getNote(noteId: string): Promise<Note|null>;
   updateNote(id: string, data: NoteUpdate): Promise<void>;
@@ -54,6 +60,8 @@ export interface Store{
   getCategory(categoryId: string): Promise<CategorySummary>;
   getCategoryNoteSummaryList(categoryId: string): Promise<NoteSummary[]>;
   createCategory(category: CategoryCreate): Promise<CategorySummary>;
+  deleteCategory(categoryId: string): Promise<void>;
+  updateCategory(categoryId: string, data: CategoryUpdate): Promise<void>;
   getNotebook(notebookId: string): Promise<NotebookSummary>
   getNotebookList(): Promise<NotebookSummary[]>;
   getNotebookWithCategories(notebookId: string): Promise<NotebookWithCategories>;

@@ -1,22 +1,55 @@
 <template>
   <section class="notebookTree" v-if="notebook">
-		<!-- <h2>{{notebook.title}}</h2> -->
-		<ul>
-			<li
-				v-for="category in notebook.categories"
+    <!-- <h2>{{notebook.title}}</h2> -->
+    <ul>
+      <li
+        v-for="category in notebook.categories"
         :key="category.id"
-				@click="switchFold(category.id)"
-			>
+        @click="switchFold(category.id)"
+      >
         <svg-icon className="icon" icon="notebook/folder" />
-        <span>{{category.title}}</span>
-				<transition-group
-					name="note-list"
-					tag="ul"
-					droppable="true"
-					v-show="!foldMap[category.id]"
-					>
+        <span v-show="opCategoryAction !== 'rename'">{{category.title}}</span>
+        <input
+          type="text"
+          v-show="opCategoryAction === 'rename'"
+          v-model="opCategoryTitle"
+          ref="opCategoryTitleInput"
+          @click.stop
+          @keydown.enter="renameCategory(category.id)"
+          @keydown.esc="cancelOpCategory"
+        />
+        <svg-icon
+          className="icon op"
+          icon="notebook/note"
+          @click.stop="setOpCategoryId(category.id)"
+        />
+        <li
+          class="tree-confirm"
+          v-if="opCategoryId === category.id && !opCategoryAction"
+        >
+          <div class="tree-op">
+            <button @click.stop="setOpCategoryAction('rename', category.title);">重命名</button>
+            <button @click.stop="setOpCategoryAction('delete')">删除</button>
+          </div>
+        </li>
+        <li
+          class="tree-confirm"
+          v-if="opCategoryId === category.id && opCategoryAction === 'delete'"
+        >
+          <p>确认删除分类及所有笔记？</p>
+          <div class="tree-op">
+            <button class="ui-button danger" @click.stop="deleteCategory(category.id)">确认</button>
+            <button class="ui-button" @click.stop="cancelOpCategory">取消</button>
+          </div>
+        </li>
+        <transition-group
+          name="note-list"
+          tag="ul"
+          droppable="true"
+          v-show="!foldMap[category.id]"
+          >
           <template
-						v-for="note in category.notes"
+            v-for="note in category.notes"
             :key="note.id"
           >
             <li
@@ -37,17 +70,17 @@
             </li>
             <li
               v-if="pendingDeleteNoteId === note.id"
-              class="note-delete-confirm"
+              class="tree-confirm"
             >
               <p>确认删除？</p>
-              <div class="note-delete-op">
+              <div class="tree-op">
                 <button class="ui-button danger" @click.stop="deleteNote(note.id)">确认</button>
                 <button class="ui-button" @click.stop="pendingDeleteNoteId = ''">取消</button>
               </div>
             </li>
           </template>
-				</transition-group>
-			</li>
+        </transition-group>
+      </li>
       <li class="pendingCreateCategory" v-if="isPendingCreateCategory">
         <svg-icon className="icon" icon="notebook/folder" />
         <input
@@ -57,36 +90,36 @@
           @keydown.esc="cancelCreateCategory"
         />
       </li>
-		</ul>
+    </ul>
   </section>
     <!-- <section class="searchWrapper">
-		<input type="search" v-model.trim="keyword" placeholder="搜索..." />
-	</section>
-	<section class="wrapper" v-show="isSearching">
-		<div class="notFound" v-show="!searchResults.length">搜的什么鬼 一篇都没有</div>
-		<ul v-show="searchResults.length">
-			<li
-				class="icon folder"
-				v-for="(notes,category) in searchResultsWithCategories"
-			>{{category}}
-				<ul>
-					<li
-						class="icon note"
-						v-bind:class="{active:isActive(note.id)}"
-						v-for="note in notes"
-						v-on:click="switchCurrentNote(note.id)"
-						v-on:contextmenu="showContextMenu(note.id)"
-					>{{note.title}}</li>
-				</ul>
-			</li>
-		</ul>
-	</section> -->
+    <input type="search" v-model.trim="keyword" placeholder="搜索..." />
+  </section>
+  <section class="wrapper" v-show="isSearching">
+    <div class="notFound" v-show="!searchResults.length">搜的什么鬼 一篇都没有</div>
+    <ul v-show="searchResults.length">
+      <li
+        class="icon folder"
+        v-for="(notes,category) in searchResultsWithCategories"
+      >{{category}}
+        <ul>
+          <li
+            class="icon note"
+            v-bind:class="{active:isActive(note.id)}"
+            v-for="note in notes"
+            v-on:click="switchCurrentNote(note.id)"
+            v-on:contextmenu="showContextMenu(note.id)"
+          >{{note.title}}</li>
+        </ul>
+      </li>
+    </ul>
+  </section> -->
 
-	<!--<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
-		<v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
-		<v-contextmenu-item>重命名</v-contextmenu-item>
-		<v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
-	</v-contextmenu> -->
+  <!--<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
+    <v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
+    <v-contextmenu-item>重命名</v-contextmenu-item>
+    <v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
+  </v-contextmenu> -->
 </template>
 <script lang="ts">
 import { computed, nextTick, reactive, ref } from 'vue';
@@ -139,6 +172,50 @@ const useDeleteNote = () => {
   return { pendingDeleteNoteId, pendingDeleteNote, deleteNote };
 };
 
+const useOpCategory = () => {
+  const opCategoryId = ref('');
+  const opCategoryAction = ref('');
+  const opCategoryTitle = ref('');
+  const opCategoryTitleInput = ref(null);
+
+  const setOpCategoryId = function(id: string){
+    opCategoryId.value = id;
+    opCategoryAction.value = '';
+  };
+
+  const setOpCategoryAction = function(action: string, title?: string){
+    opCategoryAction.value = action;
+    if (title) {
+      opCategoryTitle.value = title;
+      nextTick(() => {
+        opCategoryTitleInput.value.focus();
+      });
+    }
+  };
+
+  const cancelOpCategory = function() {
+    opCategoryId.value = '';
+    opCategoryAction.value = '';
+  };
+
+  const deleteCategory = function(id: string) {
+    eventHub.emit(EVENTS.DELETE_CATEGORY, id);
+    cancelOpCategory();
+  };
+
+  const renameCategory = function(id: string) {
+    if(opCategoryTitle.value){
+      eventHub.emit(EVENTS.UPDATE_CATEGORY, { id, title: opCategoryTitle.value });
+    }
+    cancelOpCategory();
+  };
+
+  return {
+    opCategoryId, opCategoryAction, opCategoryTitle, opCategoryTitleInput, setOpCategoryId,
+    setOpCategoryAction, cancelOpCategory, deleteCategory, renameCategory,
+  };
+};
+
 const useCreateCategory = () => {
   const isPendingCreateCategory = ref(false);
   const pendingCreateCategoryTitle = ref('');
@@ -173,6 +250,7 @@ export default {
     const currentNote = useCurrentNote();
     const deleteNote = useDeleteNote();
     const createCategory = useCreateCategory();
+    const opCategory = useOpCategory();
     const fold = useFold();
 
     return {
@@ -181,6 +259,7 @@ export default {
       ...currentNote,
       ...deleteNote,
       ...createCategory,
+      ...opCategory,
     };
   }
 };
@@ -191,17 +270,17 @@ export default {
 
 .notebookTree{
   font-size: 14px;
-	line-height: 30px;
+  line-height: 30px;
   color: $textColor;
 }
 /* .wrapper h2,
 .wrapper .notFound{
-	font-size:14px;
-	padding-left:15px;
-	font-weight: normal;
+  font-size:14px;
+  padding-left:15px;
+  font-weight: normal;
 } */
 ul{
-	list-style: none;
+  list-style: none;
   li{
     cursor:default;
     white-space: nowrap;
@@ -227,24 +306,25 @@ ul{
   }
 }
 
-.note-delete-confirm{
-  text-align: center;
-  .note-delete-op{
+.tree-confirm{
+  // text-align: center;
+  .tree-op{
     @include buttonGroup;
+    text-align: left;
     button {
       @include smallButton;
     }
   }
 }
 .wrapper li li{
-	text-indent: 44px;
+  text-indent: 44px;
 }
 .wrapper li.active{
-	background: #CECECE;
+  background: #CECECE;
 }
 
 .wrapper .note-list-move {
-	transition: transform .4s;
+  transition: transform .4s;
 }
 
 </style>

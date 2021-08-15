@@ -3,7 +3,7 @@ import { ViewDataEditor } from './view/interfaces/ViewData';
 import { WebClientStore } from './store/WebClientStore';
 import { get as getSysConfig } from './sysConfig';
 import { eventHub, EVENTS } from './utils/eventHub';
-import { NoteCreate } from '@toonote/shared/interfaces/Store';
+import { CategoryUpdate, NoteCreate, NoteUpdate, UpdateWrapper } from '@toonote/shared/interfaces/Store';
 export interface WebClientOptions {
   container: string|HTMLElement;
   store?: string;
@@ -96,7 +96,7 @@ export class WebClient {
     });
 
     // update note
-    eventHub.on(EVENTS.UPDATE_NOTE, async (data: ViewDataEditor) => {
+    eventHub.on(EVENTS.UPDATE_NOTE, async (data: UpdateWrapper<NoteUpdate>) => {
       await this.store.updateNote(data.id, {
         title: data.title,
         content: data.content,
@@ -129,6 +129,18 @@ export class WebClient {
         title: '我的笔记',
         content: '',
         categoryId: newCategory.id,
+      });
+      this.readNotebook();
+    });
+
+    eventHub.on(EVENTS.DELETE_CATEGORY, async (id: string) => {
+      await this.store.deleteCategory(id);
+      this.readNotebook();
+    });
+
+    eventHub.on(EVENTS.UPDATE_CATEGORY, async (data: UpdateWrapper<CategoryUpdate>) => {
+      await this.store.updateCategory(data.id, {
+        title: data.title,
       });
       this.readNotebook();
     });
