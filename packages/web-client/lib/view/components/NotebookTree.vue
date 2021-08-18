@@ -20,31 +20,35 @@
         />
         <svg-icon
           className="icon op"
-          icon="notebook/note"
+          icon="notebook/op"
           @click.stop="setOpCategoryId(category.id)"
         />
-        <li
-          class="tree-confirm"
-          v-if="opCategoryId === category.id && !opCategoryAction"
-        >
-          <div class="tree-op">
-            <button @click.stop="setOpCategoryAction('rename', category.title);">重命名</button>
-            <button @click.stop="setOpCategoryAction('delete')">删除</button>
+        <height-transition>
+          <div
+            class="tree-confirm"
+            v-if="opCategoryId === category.id && !opCategoryAction"
+          >
+            <div class="tree-op">
+              <button @click.stop="setOpCategoryAction('rename', category.title);">重命名</button>
+              <button @click.stop="setOpCategoryAction('delete')">删除</button>
+            </div>
           </div>
-        </li>
-        <li
-          class="tree-confirm"
-          v-if="opCategoryId === category.id && opCategoryAction === 'delete'"
-        >
-          <p>确认删除分类及所有笔记？</p>
-          <div class="tree-op">
-            <button class="ui-button danger" @click.stop="deleteCategory(category.id)">确认</button>
-            <button class="ui-button" @click.stop="cancelOpCategory">取消</button>
-          </div>
-        </li>
-        <transition-group
-          name="note-list"
+        </height-transition>
+        <height-transition>
+          <li
+            class="tree-confirm"
+            v-if="opCategoryId === category.id && opCategoryAction === 'delete'"
+          >
+            <p>确认删除分类及所有笔记？</p>
+            <div class="tree-op">
+              <button class="ui-button danger" @click.stop="deleteCategory(category.id)">确认</button>
+              <button class="ui-button" @click.stop="cancelOpCategory">取消</button>
+            </div>
+          </li>
+        </height-transition>
+        <ul
           tag="ul"
+          name="note-list"
           droppable="true"
           v-show="!foldMap[category.id]"
           >
@@ -64,22 +68,24 @@
               <span>{{note.title}}</span>
               <svg-icon
                 className="icon delete"
-                icon="notebook/note"
+                icon="notebook/delete"
                 @click.stop="pendingDeleteNote(note.id)"
               />
             </li>
-            <li
-              v-if="pendingDeleteNoteId === note.id"
-              class="tree-confirm"
-            >
-              <p>确认删除？</p>
-              <div class="tree-op">
-                <button class="ui-button danger" @click.stop="deleteNote(note.id)">确认</button>
-                <button class="ui-button" @click.stop="pendingDeleteNoteId = ''">取消</button>
-              </div>
-            </li>
+            <height-transition>
+              <li
+                v-if="pendingDeleteNoteId === note.id"
+                class="tree-confirm"
+              >
+                <p>确认删除？</p>
+                <div class="tree-op">
+                  <button class="ui-button danger" @click.stop="deleteNote(note.id)">确认</button>
+                  <button class="ui-button" @click.stop="pendingDeleteNoteId = ''">取消</button>
+                </div>
+              </li>
+            </height-transition>
           </template>
-        </transition-group>
+        </ul>
       </li>
       <li class="pendingCreateCategory" v-if="isPendingCreateCategory">
         <svg-icon className="icon" icon="notebook/folder" />
@@ -125,6 +131,7 @@
 import { computed, nextTick, reactive, ref } from 'vue';
 import { getData } from '../viewData';
 import { eventHub, EVENTS } from '../../utils/eventHub';
+import HeightTransition from './ui/HeightTransition.vue';
 
 const useFold = () => {
   const foldMap = reactive({});
@@ -179,7 +186,11 @@ const useOpCategory = () => {
   const opCategoryTitleInput = ref(null);
 
   const setOpCategoryId = function(id: string){
-    opCategoryId.value = id;
+    if (opCategoryId.value !== id) {
+      opCategoryId.value = id;
+    } else {
+      opCategoryId.value = '';
+    }
     opCategoryAction.value = '';
   };
 
@@ -244,6 +255,9 @@ const useCreateCategory = () => {
 };
 
 export default {
+  components: {
+    HeightTransition,
+  },
   setup(props, ctx){
     const notebook = getData('notebook');
 
@@ -289,6 +303,14 @@ ul{
     span {
       padding-left: 5px;
     }
+    .op {
+      float: right;
+      margin-top: 8px;
+      display: none;
+    }
+    &:hover .op {
+      display: block;
+    }
     li {
       padding-left: 20px;
       &.active {
@@ -307,10 +329,14 @@ ul{
 }
 
 .tree-confirm{
+  border-left: 2px solid $themeColor;
+  box-sizing: border-box;
+  // padding-left: 10px;
   // text-align: center;
   .tree-op{
     @include buttonGroup;
     text-align: left;
+    padding: 5px 10px;
     button {
       @include smallButton;
     }

@@ -13,6 +13,7 @@ $shadowColor: rgba(84, 164, 255, 1);
 
 @mixin buttonGroup{
   text-align: center;
+  display: flex;
   button {
     margin-right: 5px;
     &:last-child {
