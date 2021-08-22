@@ -2,10 +2,10 @@ import { StoreLocal } from '@toonote/store-local';
 
 const storeLocal = new StoreLocal();
 
-export const get = (key: string) => {
-  return storeLocal.getConfigSync(key);
+export const get = async (key: string) => {
+  return storeLocal.getConfig(key);
 }
 
-export const set = (key: string, value) => {
-  storeLocal.setConfigSync(key, value);
+export const set = async (key: string, value: unknown) => {
+  storeLocal.setConfig(key, value);
 }

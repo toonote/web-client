@@ -11,5 +11,8 @@
         "type": "store"
       }
     }
+  },
+  "devDependencies": {
+    "localforage": "^1.10.0"
   }
 }
