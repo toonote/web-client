@@ -1,13 +1,13 @@
 import localForage from 'localforage';
 
-import { Note, NoteSummary, NoteUpdate, Category, CategorySummary, NotebookSummary, NotebookWithCategories, Store, CategoryUpdate } from '@toonote/shared/interfaces/Store';
+import { Note, NoteSummary, NoteUpdate, Category, CategorySummary, NotebookSummary, NotebookWithCategories, Store, CategoryUpdate, AttachmentCreate, Attachment } from '@toonote/shared/interfaces/Store';
 
 export interface StoreLocalOptions{
   prefix?: string;
 }
 
-type StoreType = 'NOTEBOOK_LIST' | 'CATEGORY_LIST' | 'NOTE_LIST' |
-  'NOTE' | 'CATEGORY' | 'NOTEBOOK' |
+type StoreType = 'NOTEBOOK_LIST' |
+  'NOTE' | 'CATEGORY' | 'NOTEBOOK' | 'ATTACHMENT' |
   'CONFIG';
 
 export class StoreLocal implements Store {
@@ -23,17 +23,17 @@ export class StoreLocal implements Store {
     });
   }
 
-  private getValue(key: string): Promise<unknown> {
-    const value = localForage.getItem(key);
+  private async getValue(key: string): Promise<unknown> {
+    const value = await localForage.getItem(key);
     return value;
   }
 
-  private setValue(key: string, value?: unknown) {
+  private async setValue(key: string, value?: unknown): Promise<void> {
     if (value === null || value === undefined) {
       localForage.removeItem(key);
       return;
     }
-    return localForage.setItem(key, value);
+    await localForage.setItem(key, value);
   }
 
   async getConfig(key: string) {
@@ -41,7 +41,7 @@ export class StoreLocal implements Store {
   }
 
   async setConfig(key: string, value): Promise<void> {
-    this.setValue(key, value);
+    await this.setValue(key, value);
   }
 
   async getNote(noteId: string): Promise<Note|null> {
@@ -59,19 +59,19 @@ export class StoreLocal implements Store {
       ...data,
     };
     const storageKey = this.getPrefix('NOTE', id);
-    this.setValue(storageKey, newNote);
+    return this.setValue(storageKey, newNote);
   }
 
   async deleteNote(id: string): Promise<void> {
     const note = await this.getNote(id);
 
     const storageKey = this.getPrefix('NOTE', id);
-    this.setValue(storageKey);
+    await this.setValue(storageKey);
 
     const category = await this.getCategory(note.categoryId);
     category.noteIds = category.noteIds.filter(noteId => noteId !== id);
     const categoryStorageKey = this.getPrefix('CATEGORY', note.categoryId);
-    this.setValue(categoryStorageKey, category);
+    await this.setValue(categoryStorageKey, category);
   }
 
   async setNoteContent(noteId: string, content: string): Promise<void> {
@@ -80,26 +80,26 @@ export class StoreLocal implements Store {
 
   async createNote(data: Note): Promise<Note> {
     const storageKey = this.getPrefix('NOTE', data.id);
-    this.setValue(storageKey, data);
+    await this.setValue(storageKey, data);
 
     const category = await this.getCategory(data.categoryId);
     category.noteIds.push(data.id);
 
     const categoryStorageKey = this.getPrefix('CATEGORY', data.categoryId);
-    this.setValue(categoryStorageKey, category);
+    await this.setValue(categoryStorageKey, category);
 
     return data;
   }
 
   async createCategory(data: CategorySummary): Promise<CategorySummary> {
     const storageKey = this.getPrefix('CATEGORY', data.id);
-    this.setValue(storageKey, data);
+    await this.setValue(storageKey, data);
 
     const notebook = await this.getNotebook(data.notebookId);
     notebook.categoryIds.push(data.id);
 
     const notebookStorageKey = this.getPrefix('NOTEBOOK', data.notebookId);
-    this.setValue(notebookStorageKey, notebook);
+    await this.setValue(notebookStorageKey, notebook);
     return data;
   }
 
@@ -111,9 +111,9 @@ export class StoreLocal implements Store {
     const notebook = await this.getNotebook(category.notebookId);
     notebook.categoryIds = notebook.categoryIds.filter(id => id !== categoryId);
     const notebookStorageKey = this.getPrefix('NOTEBOOK', category.notebookId);
-    this.setValue(notebookStorageKey, notebook);
+    await this.setValue(notebookStorageKey, notebook);
     const categoryStorageKey = this.getPrefix('CATEGORY', categoryId);
-    this.setValue(categoryStorageKey);
+    await this.setValue(categoryStorageKey);
   }
 
   async updateCategory(categoryId: string, data: CategoryUpdate): Promise<void> {
@@ -126,7 +126,7 @@ export class StoreLocal implements Store {
       ...data,
     };
     const storageKey = this.getPrefix('CATEGORY', categoryId);
-    this.setValue(storageKey, newCategory);
+    await this.setValue(storageKey, newCategory);
   }
 
   /* async getCategoryList(notebookId: string): Promise<CategorySummary[]> {
@@ -168,14 +168,14 @@ export class StoreLocal implements Store {
 
   async createNotebook(data: NotebookSummary): Promise<NotebookSummary> {
     const storageKey = this.getPrefix('NOTEBOOK', data.id);
-    this.setValue(storageKey, data);
+    await this.setValue(storageKey, data);
 
     // add to notebook list
     let notebookList = await this.getNotebookList();
     if(!notebookList) notebookList = [];
     notebookList.push(data);
     const notebookStorageKey = this.getPrefix('NOTEBOOK_LIST');
-    this.setValue(notebookStorageKey, notebookList);
+    await this.setValue(notebookStorageKey, notebookList);
     return data;
   }
 
@@ -202,6 +202,22 @@ export class StoreLocal implements Store {
       notebook.categories.push(category);
     }
     return notebook;
+  }
+
+  async createAttachment(attachment: Attachment): Promise<Attachment> {
+    const storageKey = this.getPrefix('ATTACHMENT', attachment.id);
+    await this.setValue(storageKey, attachment);
+    return attachment;
+  }
+
+  async getAttachment(attachmentId: string): Promise<Attachment> {
+    const storageKey = this.getPrefix('ATTACHMENT', attachmentId);
+    return this.getValue(storageKey) as Promise<Attachment>;
+  }
+
+  async deleteAttachment(attachmentId: string): Promise<void> {
+    const storageKey = this.getPrefix('ATTACHMENT', attachmentId);
+    await this.setValue(storageKey);
   }
 
   private getPrefix(type: StoreType, key?: string): string {

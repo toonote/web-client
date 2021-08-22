@@ -1,9 +1,8 @@
 import { WebClientView } from './view/WebClientView';
-import { ViewDataEditor } from './view/interfaces/ViewData';
 import { WebClientStore } from './store/WebClientStore';
 import { get as getSysConfig } from './sysConfig';
 import { eventHub, EVENTS } from './utils/eventHub';
-import { CategoryUpdate, NoteCreate, NoteUpdate, UpdateWrapper } from '@toonote/shared/interfaces/Store';
+import { AttachmentCreate, CategoryUpdate, NoteCreate, NoteUpdate, UpdateWrapper } from '@toonote/shared/interfaces/Store';
 export interface WebClientOptions {
   container: string|HTMLElement;
   store?: string;
@@ -33,7 +32,7 @@ export class WebClient {
     let store = options.store;
 
     if(!store){
-      store = getSysConfig('STORE_PLUGIN');
+      store = (await getSysConfig('STORE_PLUGIN')) as string;
     }
     if(!store){
       store = '@toonote/store-local';
@@ -143,6 +142,14 @@ export class WebClient {
         title: data.title,
       });
       this.readNotebook();
+    });
+
+    eventHub.on(EVENTS.CREATE_IMAGE, async (data: AttachmentCreate) => {
+      console.log('events: CREATE_IMAGE', attachment);
+      const attachment = await this.store.createAttachment(data);
+      const url = await this.store.getAttachmentUrl(attachment);
+      console.log('image url:', url);
+      // eventHub.emit('INSERT_CONTENT', )
     });
 
   }

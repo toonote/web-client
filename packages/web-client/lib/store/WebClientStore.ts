@@ -1,4 +1,5 @@
-import { CategoryCreate, CategorySummary, Note, NoteCreate, NoteUpdate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store, CategoryUpdate } from '@toonote/shared/interfaces/Store';
+import { CategoryCreate, CategorySummary, Note, NoteCreate, NoteUpdate, NotebookCreate, NotebookSummary, NotebookWithCategories, Store, CategoryUpdate, AttachmentCreate, Attachment } from '@toonote/shared/interfaces/Store';
+import { getMimeByExtension } from '../utils/attachment';
 import { idGen } from './idGen';
 // import { StoreLocal } from '@toonote/store-local';
 
@@ -88,5 +89,33 @@ export class WebClientStore {
 
   async getNote(id: string): Promise<Note>{
     return this._storeInstance.getNote(id);
+  }
+
+  async createAttachment(data: AttachmentCreate): Promise<Attachment> {
+    const createData: Attachment = {
+      id: idGen(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...data,
+    };
+    return this._storeInstance.createAttachment(createData);
+  }
+
+  async getAttachmentUrl(attachment: Attachment): Promise<string> {
+    if (attachment.url) {
+      return attachment.url;
+    }
+
+    if (attachment.blob || attachment.file) {
+      return URL.createObjectURL(attachment.blob || attachment.file);
+    }
+
+    if (attachment.base64) {
+      const mime = getMimeByExtension(attachment.ext);
+      return `data:${mime};base64,${attachment.base64}`;
+    }
+
+    return '';
+
   }
 }

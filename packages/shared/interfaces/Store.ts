@@ -49,21 +49,45 @@ export interface NotebookWithCategories extends NotebookSummary {
 
 export type NotebookCreate = Omit<NotebookSummary, 'id' | 'createdAt' | 'updatedAt' | 'categoryIds'>;
 
+export interface Attachment {
+  id: string;
+  name: string;
+  size: string;
+  ext: string;
+  file?: File;
+  blob?: Blob;
+  url?: string;
+  base64?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type AttachmentCreate = Omit<Attachment, 'id' | 'createdAt' | 'updatedAt'>;
+
 export interface Store{
+
   getConfig(key: string): Promise<unknown>;
   setConfig(key: string, value): Promise<void>;
+
   getNote(noteId: string): Promise<Note|null>;
   updateNote(id: string, data: NoteUpdate): Promise<void>;
   setNoteContent(noteId: string, content: string): Promise<void>;
   createNote(note: Note): Promise<Note>;
   deleteNote(noteId: string): Promise<void>;
+
   getCategory(categoryId: string): Promise<CategorySummary>;
   getCategoryNoteSummaryList(categoryId: string): Promise<NoteSummary[]>;
   createCategory(category: CategoryCreate): Promise<CategorySummary>;
   deleteCategory(categoryId: string): Promise<void>;
   updateCategory(categoryId: string, data: CategoryUpdate): Promise<void>;
+
   getNotebook(notebookId: string): Promise<NotebookSummary>
   getNotebookList(): Promise<NotebookSummary[]>;
   getNotebookWithCategories(notebookId: string): Promise<NotebookWithCategories>;
   createNotebook(data: NotebookCreate): Promise<NotebookSummary>;
+
+  getAttachment(attachmentId: string): Promise<Attachment>;
+  createAttachment(attachment: Attachment): Promise<Attachment>;
+  deleteAttachment(attachmentId: string): Promise<void>;
+
 }

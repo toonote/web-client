@@ -10,7 +10,7 @@
         <div class="title-editor">
           <input type="text" v-model="editor[0].title" />
         </div>
-        <editor class="editor" v-model="editor[0].content"></editor>
+        <editor class="editor" v-model="editor[0].content" @insert-image="insertImage"></editor>
       </div>
     </div>
     <!--
@@ -30,6 +30,7 @@ import { eventHub, EVENTS } from '../../utils/eventHub';
 import NotebookTree from './NotebookTree.vue';
 import Toolbar from './Toolbar.vue';
 import UserInfo from './UserInfo.vue';
+import { getExtensionByFile } from '../../utils/attachment';
 // import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
@@ -63,6 +64,19 @@ export default {
       if(typeof newTitle === 'undefined' || typeof oldTitle === 'undefined') return;
       eventHub.emit(EVENTS.UPDATE_NOTE_TITLE, newTitle);
     });
+
+    const insertImage = (file: File) => {
+      const ext = getExtensionByFile(file);
+      const size = file.size;
+      const name = file.name;
+
+      eventHub.emit(EVENTS.CREATE_IMAGE, {
+        ext,
+        size,
+        name,
+        file,
+      });
+    };
       // const editor = reactive(getData('editor'));
       // const userInfo = reactive(getData('userInfo'));
 
@@ -79,6 +93,7 @@ export default {
 
     return {
       editor,
+      insertImage,
         // userInfo,
     };
   }

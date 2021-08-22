@@ -9,6 +9,10 @@ import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
 import Placeholder from '@tiptap/extension-placeholder';
+import Image from '@tiptap/extension-image';
+
+import PasteImage from './extensions/PasteImage';
+import { getExtensionByFile } from './utils/attachment';
 
 export default {
   props: ['modelValue'],
@@ -19,7 +23,15 @@ export default {
     onMounted(() => {
       editor = new Editor({
         element: editorElm.value,
-        extensions: [StarterKit, Highlight, Typography, Placeholder],
+        extensions: [
+          StarterKit, Highlight, Typography, Placeholder, Image,
+          PasteImage.configure({
+            onPaste: (file: File) => {
+              ctx.emit('insert-image', file);
+              console.log('onPaste', file);
+            },
+          }),
+        ],
         content: props.modelValue,
         onUpdate: ({ editor }) => {
           ctx.emit('update:modelValue', editor.getHTML());
