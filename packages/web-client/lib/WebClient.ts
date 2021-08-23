@@ -1,7 +1,7 @@
 import { WebClientView } from './view/WebClientView';
 import { WebClientStore } from './store/WebClientStore';
 import { get as getSysConfig } from './sysConfig';
-import { eventHub, EVENTS } from './utils/eventHub';
+import { eventHub, EVENTS, PAYLOAD_INSERT_IMAGE } from './utils/eventHub';
 import { AttachmentCreate, CategoryUpdate, NoteCreate, NoteUpdate, UpdateWrapper } from '@toonote/shared/interfaces/Store';
 export interface WebClientOptions {
   container: string|HTMLElement;
@@ -145,11 +145,17 @@ export class WebClient {
     });
 
     eventHub.on(EVENTS.CREATE_IMAGE, async (data: AttachmentCreate) => {
-      console.log('events: CREATE_IMAGE', attachment);
+      console.log('events: CREATE_IMAGE', data);
       const attachment = await this.store.createAttachment(data);
-      const url = await this.store.getAttachmentUrl(attachment);
+      const url = this.store.getAttachmentUrl(attachment);
       console.log('image url:', url);
-      // eventHub.emit('INSERT_CONTENT', )
+
+      const imagePayload: PAYLOAD_INSERT_IMAGE = {
+        id: attachment.id,
+        name: attachment.name,
+        url,
+      };
+      eventHub.emit(EVENTS.INSERT_IMAGE, imagePayload);
     });
 
   }

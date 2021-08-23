@@ -101,7 +101,7 @@ export class WebClientStore {
     return this._storeInstance.createAttachment(createData);
   }
 
-  async getAttachmentUrl(attachment: Attachment): Promise<string> {
+  getAttachmentUrl(attachment: Attachment): string {
     if (attachment.url) {
       return attachment.url;
     }

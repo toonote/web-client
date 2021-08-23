@@ -16,5 +16,12 @@ export const EVENTS = {
 
   CREATE_IMAGE: Symbol('CREATE_IMAGE'),
 
-  INSERT_CONTENT: Symbol('INSERT_CONTENT'),
+  INSERT_IMAGE: Symbol('INSERT_IMAGE'),
 };
+
+
+export interface PAYLOAD_INSERT_IMAGE {
+  id: string;
+  name: string;
+  url: string;
+}

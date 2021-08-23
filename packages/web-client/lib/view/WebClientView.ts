@@ -1,15 +1,6 @@
 import { createVueApp } from './createApp';
 import { data } from './viewData';
-/* import createApp from './createApp';
-import { setData } from './dataInjector';
 
-const { app } = createApp();
-
-const webClientView:WebClientView = {
-    app,
-    setData,
-};
- */
 interface WebClientViewOptions {
     // todo
 }

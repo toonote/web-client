@@ -6,11 +6,11 @@
     </div>
     <div class="row main">
       <notebook-tree class="notebookTree" />
-      <div class="editor-wrapper" v-if="editor[0]">
+      <div class="editor-wrapper" v-if="editorData[0]">
         <div class="title-editor">
-          <input type="text" v-model="editor[0].title" />
+          <input type="text" v-model="editorData[0].title" />
         </div>
-        <editor class="editor" v-model="editor[0].content" @insert-image="insertImage"></editor>
+        <editor ref="editorRef" class="editor" v-model="editorData[0].content" @insert-image="insertImage"></editor>
       </div>
     </div>
     <!--
@@ -21,17 +21,16 @@
 </template>
 
 <script lang="ts">
-import { ComputedRef, watch } from 'vue';
+import { ref, ComputedRef, onMounted, watch } from 'vue';
 import { Note } from '@toonote/shared/interfaces/Store';
 import Editor from '@toonote/editor-tiptap';
 
 import { getData } from '../viewData';
-import { eventHub, EVENTS } from '../../utils/eventHub';
+import { eventHub, EVENTS, PAYLOAD_INSERT_IMAGE } from '../../utils/eventHub';
 import NotebookTree from './NotebookTree.vue';
 import Toolbar from './Toolbar.vue';
 import UserInfo from './UserInfo.vue';
 import { getExtensionByFile } from '../../utils/attachment';
-// import Preview from './Preview.vue';
 // import Login from './Login.vue';
 
 const isNoteChanged = (newData: Note, oldData: Note): boolean => {
@@ -49,10 +48,10 @@ export default {
     // Login,
   },
   setup(props, ctx){
-    const editor = getData('editor') as unknown as ComputedRef<Note[]>;
+    const editorData = getData('editor') as unknown as ComputedRef<Note[]>;
 
     // oldValue is same as newValue, strange...
-    watch(editor.value, (newValue, oldValue) => {
+    watch(editorData.value, (newValue, oldValue) => {
       for (let i = 0; i < newValue.length; i++) {
         if (isNoteChanged(newValue[i], oldValue[i])) {
           eventHub.emit(EVENTS.UPDATE_NOTE, newValue[i]);
@@ -60,7 +59,7 @@ export default {
       }
     });
 
-    watch(() => editor.value[0] && editor.value[0].title, (newTitle: string, oldTitle: string) => {
+    watch(() => editorData.value[0] && editorData.value[0].title, (newTitle: string, oldTitle: string) => {
       if(typeof newTitle === 'undefined' || typeof oldTitle === 'undefined') return;
       eventHub.emit(EVENTS.UPDATE_NOTE_TITLE, newTitle);
     });
@@ -77,22 +76,29 @@ export default {
         file,
       });
     };
-      // const editor = reactive(getData('editor'));
-      // const userInfo = reactive(getData('userInfo'));
 
-      // let lastContent = editor.data.content;
+    const editorRef = ref(null);
 
-      // watch(() => {
-      //     if(lastContent !== editor.data.content && typeof editor.data.content !== 'undefined'){
-      //         ctx.root.$webClient.$emit('editor.change', {
-      //             content: editor.data.content
-      //         });
-      //         lastContent = editor.data.content;
-      //     }
-      // });
+    onMounted(() => {
+      eventHub.on(EVENTS.INSERT_IMAGE, (img: PAYLOAD_INSERT_IMAGE) => {
+        const editor = editorRef?.value?.editor.tiptap;
+        if (!editor) return;
+        debugger;
+        editor.commands.insertContent({
+          type: 'image',
+          attrs: {
+            attachment_id: img.id,
+            src: img.url,
+            alt: img.name,
+            title: img.name,
+          },
+        });
+      });
+    });
 
     return {
-      editor,
+      editorRef,
+      editorData,
       insertImage,
         // userInfo,
     };
