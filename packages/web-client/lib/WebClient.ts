@@ -61,10 +61,13 @@ export class WebClient {
     const notebookData = await this.store.getNotebook(notebookList[0].id);
     this.view.data.notebook = notebookData;
   }
-  async readNote(){
-    // todo: 上次状态恢复
-    const noteSummary = this.view.data.notebook.categories[0].notes[0];
-    const note = await this.store.getNote(noteSummary.id);
+  async readNote(noteId?: string){
+    if (!noteId) {
+      // todo: 上次状态恢复
+      const noteSummary = this.view.data.notebook.categories[0].notes[0];
+      noteId = noteSummary.id;
+    }
+    const note = await this.store.getNote(noteId);
     this.view.data.editor[0] = {
       ...note,
     };
@@ -108,10 +111,7 @@ export class WebClient {
     });
 
     eventHub.on(EVENTS.SWITCH_CURRENT_NOTE, async (id: string) => {
-      const note = await this.store.getNote(id);
-      this.view.data.editor[0] = {
-        ...note,
-      };
+      this.readNote(id);
     });
 
     eventHub.on(EVENTS.DELETE_NOTE, async (id: string) => {

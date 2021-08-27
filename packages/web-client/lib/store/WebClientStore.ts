@@ -88,7 +88,11 @@ export class WebClientStore {
   }
 
   async getNote(id: string): Promise<Note>{
-    return this._storeInstance.getNote(id);
+    const note = await this._storeInstance.getNote(id);
+    if (note) {
+      note.content = await this._normalizeAttachment(note.content);
+    }
+    return note;
   }
 
   async createAttachment(data: AttachmentCreate): Promise<Attachment> {
@@ -117,5 +121,22 @@ export class WebClientStore {
 
     return '';
 
+  }
+
+  private async _normalizeAttachment(content: string): Promise<string> {
+    const imgReg = /<img attachment_id="([0-9a-z-]+)" src="([a-zZ-Z0-9-:/.]+)"/g;
+
+    const matches = content.matchAll(imgReg);
+    console.log(matches);
+    for (const match of matches) {
+      const id = match[1];
+      console.log(match[1], match[2]);
+      const attachment = await this._storeInstance.getAttachment(id);
+      if (attachment) {
+        content = content.replace(match[0], `<img attachment_id="${id}" src="${this.getAttachmentUrl(attachment)}"`);
+      }
+    }
+
+    return content;
   }
 }
