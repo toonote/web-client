@@ -36,6 +36,7 @@ import PasteImage from './extensions/PasteImage';
 export default {
   props: ['modelValue'],
   setup(props, ctx) {
+    const localValue = ref('');
     const editorElm = ref(null);
     let editor:{
       tiptap: Editor;
@@ -71,13 +72,17 @@ export default {
         ],
         content: props.modelValue,
         onUpdate: ({ editor }) => {
+          localValue.value = editor.getHTML();
           ctx.emit('update:modelValue', editor.getHTML());
         },
       });
     });
 
     watch(() => props.modelValue, (content: string) => {
-      editor.tiptap.commands.setContent(content);
+      if (localValue.value !== content) {
+        editor.tiptap.commands.setContent(content);
+        localValue.value = content;
+      }
     });
 
     return {
