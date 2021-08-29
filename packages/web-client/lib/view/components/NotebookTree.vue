@@ -51,7 +51,6 @@
           </li>
         </height-transition>
         <ul
-          tag="ul"
           name="note-list"
           droppable="true"
           v-show="!foldMap[category.id]"
@@ -79,10 +78,10 @@
             <height-transition>
               <li
                 v-if="pendingDeleteNoteId === note.id"
-                class="tree-confirm"
+                class="ui-chain-dialog noteDeleteDialog"
               >
-                <p>确认删除？</p>
-                <div class="tree-op">
+                <p class="ui-chain-dialog-text">确认删除？</p>
+                <div class="ui-chain-dialog-button">
                   <button class="ui-button danger" @click.stop="deleteNote(note.id)">确认</button>
                   <button class="ui-button" @click.stop="pendingDeleteNoteId = ''">取消</button>
                 </div>
@@ -297,9 +296,12 @@ ul{
         margin-top: 8px;
         display: none;
       }
-      &:hover .delete{
+      &:hover .delete {
         display: block;
       }
+    }
+    .noteDeleteDialog {
+      margin-left: 20px;
     }
   }
 }
