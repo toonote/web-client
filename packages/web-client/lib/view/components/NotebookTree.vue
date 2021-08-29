@@ -8,7 +8,7 @@
         @click="switchFold(category.id)"
       >
         <svg-icon className="icon" icon="notebook/folder" />
-        <span v-show="opCategoryAction !== 'rename'">{{category.title}}</span>
+        <span class="title" v-show="opCategoryAction !== 'rename'">{{category.title}}</span>
         <input
           type="text"
           v-show="opCategoryAction === 'rename'"
@@ -25,22 +25,26 @@
         />
         <height-transition>
           <div
-            class="tree-confirm"
+            class="ui-chain-dialog"
             v-if="opCategoryId === category.id && !opCategoryAction"
           >
-            <div class="tree-op">
-              <button @click.stop="setOpCategoryAction('rename', category.title);">重命名</button>
-              <button @click.stop="setOpCategoryAction('delete')">删除</button>
-            </div>
+            <ul class="ui-chain-dialog-menu">
+              <li @click.stop="setOpCategoryAction('rename', category.title);">
+                <span>重命名</span>
+              </li>
+              <li @click.stop="setOpCategoryAction('delete')">
+                <span>删除</span>
+              </li>
+            </ul>
           </div>
         </height-transition>
         <height-transition>
           <li
-            class="tree-confirm"
+            class="ui-chain-dialog"
             v-if="opCategoryId === category.id && opCategoryAction === 'delete'"
           >
-            <p>确认删除分类及所有笔记？</p>
-            <div class="tree-op">
+            <p class="ui-chain-dialog-text">确认删除分类及所有笔记？</p>
+            <div class="ui-chain-dialog-button">
               <button class="ui-button danger" @click.stop="deleteCategory(category.id)">确认</button>
               <button class="ui-button" @click.stop="cancelOpCategory">取消</button>
             </div>
@@ -65,7 +69,7 @@
               @dragover.prevent="dragOver($event, note.id)"
             >
               <svg-icon className="icon" icon="notebook/note" />
-              <span>{{note.title}}</span>
+              <span class="title">{{note.title}}</span>
               <svg-icon
                 className="icon delete"
                 icon="notebook/delete"
@@ -98,34 +102,6 @@
       </li>
     </ul>
   </section>
-    <!-- <section class="searchWrapper">
-    <input type="search" v-model.trim="keyword" placeholder="搜索..." />
-  </section>
-  <section class="wrapper" v-show="isSearching">
-    <div class="notFound" v-show="!searchResults.length">搜的什么鬼 一篇都没有</div>
-    <ul v-show="searchResults.length">
-      <li
-        class="icon folder"
-        v-for="(notes,category) in searchResultsWithCategories"
-      >{{category}}
-        <ul>
-          <li
-            class="icon note"
-            v-bind:class="{active:isActive(note.id)}"
-            v-for="note in notes"
-            v-on:click="switchCurrentNote(note.id)"
-            v-on:contextmenu="showContextMenu(note.id)"
-          >{{note.title}}</li>
-        </ul>
-      </li>
-    </ul>
-  </section> -->
-
-  <!--<v-contextmenu @hide="hideContextMenu" ref="contextMenu">
-    <v-contextmenu-item @click="newNote('menu')">新建笔记</v-contextmenu-item>
-    <v-contextmenu-item>重命名</v-contextmenu-item>
-    <v-contextmenu-item @click="deleteNote">删除</v-contextmenu-item>
-  </v-contextmenu> -->
 </template>
 <script lang="ts">
 import { computed, nextTick, reactive, ref } from 'vue';
@@ -300,7 +276,7 @@ ul{
     white-space: nowrap;
     overflow: hidden;
     vertical-align: middle;
-    span {
+    span.title {
       padding-left: 5px;
     }
     .op {
@@ -328,20 +304,6 @@ ul{
   }
 }
 
-.tree-confirm{
-  border-left: 2px solid $themeColor;
-  box-sizing: border-box;
-  // padding-left: 10px;
-  // text-align: center;
-  .tree-op{
-    @include buttonGroup;
-    text-align: left;
-    padding: 5px 10px;
-    button {
-      @include smallButton;
-    }
-  }
-}
 .wrapper li li{
   text-indent: 44px;
 }
