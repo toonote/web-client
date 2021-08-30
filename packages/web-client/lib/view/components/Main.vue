@@ -138,6 +138,7 @@ body{
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
   /* background:url('../images/bg.jpg') center 40% no-repeat; */
   .row {
     display: flex;
@@ -146,8 +147,8 @@ body{
     margin: 20px 30px;
   }
   .main {
-    flex: 1;
     display: flex;
+    overflow: hidden;
   }
   .toolbar{
     flex: 1;
@@ -161,8 +162,8 @@ body{
     display: flex;
     flex-direction: column;
     // margin-top: 10px;
-    margin-right: 30px;
     .title-editor {
+      margin-right: 30px;
       margin-bottom: 30px;
       input[type=text]{
         font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
@@ -175,6 +176,10 @@ body{
           outline: 0 none;
         }
       }
+    }
+    .editor {
+      overflow-y: auto;
+      padding-right: 30px;
     }
   }
 }
